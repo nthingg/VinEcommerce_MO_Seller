@@ -1,10 +1,25 @@
-import 'package:curved_navigation_bar/curved_navigation_bar.dart';
+// import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'package:flutter/material.dart';
-import 'package:vin_ecommerce/screens/home_screen.dart';
-import 'package:vin_ecommerce/screens/notification_screen.dart';
-import 'package:vin_ecommerce/screens/add_product_screen.dart';
-import 'package:vin_ecommerce/screens/order_list_screen.dart';
-import 'package:vin_ecommerce/screens/profile_screen.dart';
+import 'package:sizer2/sizer2.dart';
+import 'dart:io';
+import 'package:curved_navigation_bar/curved_navigation_bar.dart';
+
+import 'package:vin_ecommerce/screens/sign_in_page.dart';
+import 'package:vin_ecommerce/screens/seller_orders.dart';
+import 'package:vin_ecommerce/screens/seller_order_details_request.dart';
+import 'package:vin_ecommerce/screens/seller_order_details.dart';
+import 'package:vin_ecommerce/screens/seller_orders_request.dart';
+import 'package:vin_ecommerce/screens/seller_notifications.dart';
+import 'package:vin_ecommerce/screens/seller_storage.dart';
+import 'package:vin_ecommerce/screens/seller_reviews.dart';
+import 'package:vin_ecommerce/screens/seller_profile.dart';
+import 'package:vin_ecommerce/screens/seller_dashboard.dart';
+import 'package:vin_ecommerce/screens/seller_product_add.dart';
+import 'package:vin_ecommerce/screens/seller_bottom_navbar.dart';
+import 'package:vin_ecommerce/screens/seller_product_info.dart';
+import 'package:vin_ecommerce/screens/sign_up_page.dart';
+import 'package:vin_ecommerce/screens/seller_personal_info.dart';
+
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 void main() {
@@ -18,59 +33,12 @@ class MainApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(
-      title: 'VinEcom',
-      debugShowCheckedModeBanner: false,
-      home: BottomNavBar(),
-    );
+    return Sizer(builder: (context, orientation, deviceType) {
+      return MaterialApp(
+        title: 'VinEcom',
+        debugShowCheckedModeBanner: false,
+        home: BottomNavBar(),
+      );
+    });
   }
-}
-
-class BottomNavBar extends StatefulWidget {
-  const BottomNavBar({Key? key}) : super(key: key);
-
-  @override
-  State<BottomNavBar> createState() => _BottomNavBarState();
-}
-
-class _BottomNavBarState extends State<BottomNavBar> {
-  final _items = const [
-    Icon(Icons.home, size: 30),
-    Icon(Icons.list, size: 30),
-    Icon(Icons.add_circle_outline_rounded, size: 30),
-    Icon(Icons.notifications, size: 30),
-    Icon(Icons.person, size: 30)
-  ];
-
-  final _screens = const [
-    HomeScreen(),
-    OrderListScreen(),
-    AddProductScreen(),
-    NotificationScreen(),
-    ProfileScreen()
-  ];
-
-  int _currentIndex = 0;
-
-  @override
-  Widget build(BuildContext context) => Scaffold(
-      body: _screens[_currentIndex],
-      extendBody: true,
-      bottomNavigationBar: Theme(
-        data: Theme.of(context)
-            .copyWith(iconTheme: const IconThemeData(color: Colors.white)),
-        child: CurvedNavigationBar(
-          color: Colors.orange.shade500,
-          backgroundColor: Colors.transparent,
-          buttonBackgroundColor: Colors.green,
-          items: _items,
-          index: _currentIndex,
-          height: 50,
-          animationCurve: Curves.decelerate,
-          animationDuration: const Duration(milliseconds: 300),
-          onTap: (index) => setState(() {
-            _currentIndex = index;
-          }),
-        ),
-      ));
 }
