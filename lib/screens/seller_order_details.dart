@@ -1,13 +1,9 @@
 import 'package:flutter/material.dart';
-// import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sizer2/sizer2.dart';
-import 'package:vin_ecommerce/data/order_repository.dart';
-import 'package:vin_ecommerce/styles/app_assets.dart';
 import 'package:vin_ecommerce/styles/color.dart';
 import 'package:vin_ecommerce/screens/seller_orders.dart';
 
-import '../../models/order_model.dart';
 import 'seller_product_info.dart';
 
 class SellerOrderDetailsPage extends StatefulWidget {
@@ -19,29 +15,16 @@ class SellerOrderDetailsPage extends StatefulWidget {
 class _SellerOrderDetailsPageState extends State<SellerOrderDetailsPage>
     with TickerProviderStateMixin {
   late TabController tabController;
-  OrderRepository orderRepo = new OrderRepository();
-  List<Order> _orderList = [];
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-    getOrders();
     tabController = TabController(length: 1, vsync: this, initialIndex: 0);
-  }
-
-  getOrders() async {
-    // var list = await orderRepo.getOrders();
-    setState(() {
-      // _orderList = list;
-    });
   }
 
   @override
   Widget build(BuildContext context) {
-    // final storage = new FlutterSecureStorage();
-    // Future<String?> token = storage.read(key: 'token');
-    // Object token1 = token != null? token: "";
     return SafeArea(
       child: Scaffold(
         backgroundColor: Colors.white,

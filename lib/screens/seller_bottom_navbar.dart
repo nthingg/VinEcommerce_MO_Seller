@@ -11,13 +11,23 @@ import 'package:vin_ecommerce/screens/seller_storage.dart';
 import 'package:vin_ecommerce/styles/color.dart';
 
 class BottomNavBar extends StatefulWidget {
-  const BottomNavBar({Key? key}) : super(key: key);
+  final int initialIndex;
+
+  const BottomNavBar({Key? key, required this.initialIndex}) : super(key: key);
 
   @override
   State<BottomNavBar> createState() => _BottomNavBarState();
 }
 
 class _BottomNavBarState extends State<BottomNavBar> {
+  int _currentIndex = 0;
+
+  @override
+  void initState() {
+    super.initState();
+    _currentIndex = widget.initialIndex;
+  }
+
   final _items = const [
     Icon(Icons.home, size: 30),
     Icon(Icons.list, size: 30),
@@ -33,8 +43,6 @@ class _BottomNavBarState extends State<BottomNavBar> {
     SellerNotificationsPage(),
     SellerProfilePage()
   ];
-
-  int _currentIndex = 0;
 
   @override
   Widget build(BuildContext context) => Scaffold(

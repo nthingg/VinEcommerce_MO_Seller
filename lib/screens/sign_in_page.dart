@@ -40,7 +40,10 @@ class _SignInPageState extends State<SignInPage> {
     if (token != null) {
       Navigator.pushAndRemoveUntil(
         context,
-        MaterialPageRoute(builder: (_) => BottomNavBar()),
+        MaterialPageRoute(
+            builder: (_) => BottomNavBar(
+                  initialIndex: 0,
+                )),
         (route) => false,
       );
     }
@@ -66,7 +69,10 @@ class _SignInPageState extends State<SignInPage> {
         // await storage.write(key: 'token', value: data['accessToken']);
         Navigator.pushAndRemoveUntil(
             context,
-            MaterialPageRoute(builder: (_) => BottomNavBar()),
+            MaterialPageRoute(
+                builder: (_) => BottomNavBar(
+                      initialIndex: 0,
+                    )),
             (route) => false);
       } else {
         print('\n2\n');

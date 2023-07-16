@@ -43,7 +43,10 @@ class _SignUpPageState extends State<SignUpPage> {
         _prefs.setString('token', data['accessToken']);
         Navigator.pushAndRemoveUntil(
             context,
-            MaterialPageRoute(builder: (_) => BottomNavBar()),
+            MaterialPageRoute(
+                builder: (_) => BottomNavBar(
+                      initialIndex: 0,
+                    )),
             (route) => false);
       } else {
         print('\n2\n');

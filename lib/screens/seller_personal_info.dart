@@ -80,10 +80,10 @@ class _SellerPersonalInfoPageState extends State<SellerPersonalInfoPage> {
                                   shape: CircleBorder(),
                                   onPressed: () {
                                     Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                          builder: (context) => BottomNavBar()),
-                                    );
+                                        context,
+                                        MaterialPageRoute(
+                                            builder: (_) =>
+                                                BottomNavBar(initialIndex: 4)));
                                   },
                                   child: Image.asset(
                                     'assets/images/back.png',
@@ -363,7 +363,8 @@ class _SellerPersonalInfoPageState extends State<SellerPersonalInfoPage> {
                               Navigator.pushAndRemoveUntil(
                                   context,
                                   MaterialPageRoute(
-                                      builder: (_) => BottomNavBar()),
+                                      builder: (_) =>
+                                          BottomNavBar(initialIndex: 4)),
                                   (route) => false);
                             },
                           ),

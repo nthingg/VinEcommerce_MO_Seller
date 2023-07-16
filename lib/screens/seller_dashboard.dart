@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sizer2/sizer2.dart';
+import 'package:vin_ecommerce/screens/seller_bottom_navbar.dart';
 
 import 'package:vin_ecommerce/screens/seller_orders.dart';
 import 'package:vin_ecommerce/screens/seller_orders_request.dart';
+import 'package:vin_ecommerce/screens/seller_profile.dart';
 import 'package:vin_ecommerce/screens/seller_reviews.dart';
 
 import 'package:vin_ecommerce/data/review_repository.dart';
@@ -106,7 +108,11 @@ class _SellerDashboardPageState extends State<SellerDashboardPage> {
                               fillColor: Color(0xffECF0F4),
                               shape: CircleBorder(),
                               onPressed: () {
-                                getValidation();
+                                Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (_) =>
+                                            BottomNavBar(initialIndex: 4)));
                               },
                               child: CircleAvatar(
                                 radius:

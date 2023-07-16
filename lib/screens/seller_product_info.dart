@@ -49,7 +49,9 @@ class _SellerProductInfoPageState extends State<SellerProductInfoPage> {
                                     Navigator.push(
                                       context,
                                       MaterialPageRoute(
-                                          builder: (context) => BottomNavBar()),
+                                          builder: (context) => BottomNavBar(
+                                                initialIndex: 1,
+                                              )),
                                     );
                                   },
                                   child: Image.asset(
