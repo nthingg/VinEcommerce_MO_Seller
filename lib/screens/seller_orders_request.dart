@@ -31,7 +31,7 @@ class _SellerRequestOrdersPageState extends State<SellerRequestOrdersPage>
   }
 
   getOrders() async {
-    var list = await orderRepo.getOrders();
+    var list = await orderRepo.getPendingOrders();
     setState(() {
       _orderList = list;
     });
@@ -54,13 +54,14 @@ class _SellerRequestOrdersPageState extends State<SellerRequestOrdersPage>
                 shrinkWrap: true,
                 itemCount: _orderList.length,
                 itemBuilder: (context, index) {
+                  Order order = _orderList[index];
                   int orderId =
                       _orderList[index].Id != null ? _orderList[index].Id! : 0;
 
-                  main();
+                  // main();
 
                   return Container(
-                    margin: EdgeInsets.only(top: 12),
+                    margin: EdgeInsets.only(top: 12, bottom: 12),
                     child: InkWell(
                       onTap: () {
                         Navigator.push(
@@ -72,7 +73,7 @@ class _SellerRequestOrdersPageState extends State<SellerRequestOrdersPage>
                       },
                       child: Container(
                         padding: EdgeInsets.only(left: 5.w),
-                        height: 15.h,
+                        height: 28.h,
                         child: Column(children: [
                           Row(
                             children: [
@@ -91,7 +92,7 @@ class _SellerRequestOrdersPageState extends State<SellerRequestOrdersPage>
                                                 fontWeight: FontWeight.bold),
                                           ),
                                           Text(
-                                            orderId.toString(),
+                                            order.getId().toString(),
                                             style: TextStyle(
                                                 fontWeight: FontWeight.bold),
                                           ),
@@ -100,22 +101,32 @@ class _SellerRequestOrdersPageState extends State<SellerRequestOrdersPage>
                                             padding: EdgeInsets.symmetric(
                                                 horizontal: 10, vertical: 7),
                                             decoration: BoxDecoration(
-                                                color: pendingBackgroundColor,
+                                                color:
+                                                    lightYellowColorBackground,
                                                 shape: BoxShape.rectangle,
                                                 borderRadius: BorderRadius.all(
                                                     Radius.circular(14))),
                                             child: Text(
-                                              'Đang chuẩn bị',
-                                              style: TextStyle(
-                                                  color: primaryColor),
+                                              order.getStatus().toString(),
+                                              style:
+                                                  TextStyle(color: yellowColor),
                                             ),
                                           ),
                                         ],
                                       ),
                                     ),
                                     Padding(
+                                      padding:
+                                          EdgeInsets.only(left: 25, top: 2.h),
+                                      child: Text(
+                                        'FROM',
+                                        style: TextStyle(
+                                            color: secondaryTextColor),
+                                      ),
+                                    ),
+                                    Padding(
                                       padding: const EdgeInsets.symmetric(
-                                          horizontal: 0, vertical: 12),
+                                          horizontal: 0, vertical: 8),
                                       child: Column(
                                         crossAxisAlignment:
                                             CrossAxisAlignment.start,
@@ -128,7 +139,9 @@ class _SellerRequestOrdersPageState extends State<SellerRequestOrdersPage>
                                                 width: 10,
                                               ),
                                               Text(
-                                                'S01.01',
+                                                order
+                                                    .getStoreBuildingName()
+                                                    .toString(),
                                                 style: TextStyle(
                                                     fontWeight:
                                                         FontWeight.bold),
@@ -139,13 +152,60 @@ class _SellerRequestOrdersPageState extends State<SellerRequestOrdersPage>
                                       ),
                                     ),
                                     Padding(
-                                      padding: const EdgeInsets.symmetric(
-                                          horizontal: 0, vertical: 0),
+                                      padding:
+                                          EdgeInsets.only(left: 25, top: 2.h),
                                       child: Text(
-                                        'Nguyen Ngoc Thinh',
+                                        'TO',
                                         style: TextStyle(
-                                            fontWeight: FontWeight.bold,
-                                            color: primaryColor),
+                                            color: secondaryTextColor),
+                                      ),
+                                    ),
+                                    Padding(
+                                      padding: const EdgeInsets.symmetric(
+                                          horizontal: 0, vertical: 8),
+                                      child: Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          Row(
+                                            children: [
+                                              Image.asset(
+                                                  'assets/images/to_icon.png'),
+                                              SizedBox(
+                                                width: 10,
+                                              ),
+                                              Text(
+                                                order
+                                                    .getCustomerBuildingName()
+                                                    .toString(),
+                                                style: TextStyle(
+                                                    fontWeight:
+                                                        FontWeight.bold),
+                                              ),
+                                            ],
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                    Padding(
+                                      padding: EdgeInsets.only(top: 2.h),
+                                      child: Row(
+                                        children: [
+                                          Text(
+                                            'Customer',
+                                            style: TextStyle(
+                                                color: secondaryTextColor),
+                                          ),
+                                          SizedBox(
+                                            width: 8,
+                                          ),
+                                          Text(
+                                            order.getCustomerName().toString(),
+                                            style: TextStyle(
+                                                fontWeight: FontWeight.bold,
+                                                color: primaryColor),
+                                          ),
+                                        ],
                                       ),
                                     ),
                                   ],
@@ -155,9 +215,9 @@ class _SellerRequestOrdersPageState extends State<SellerRequestOrdersPage>
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   Container(
-                                    margin: EdgeInsets.only(left: 10.w),
+                                    margin: EdgeInsets.only(left: 6.w),
                                     child: Text(
-                                      '45.000' + 'đ',
+                                      order.getTotal().toString() + ' VND',
                                       style: TextStyle(
                                         fontWeight: FontWeight.bold,
                                         fontSize: 18,

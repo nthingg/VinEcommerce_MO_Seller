@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 // import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sizer2/sizer2.dart';
-import 'package:vin_ecommerce/data/order_repository.dart';
 import 'package:vin_ecommerce/styles/app_assets.dart';
 import 'package:vin_ecommerce/styles/color.dart';
 
@@ -18,22 +17,12 @@ class SellerStoragePage extends StatefulWidget {
 class _SellerStoragePageState extends State<SellerStoragePage>
     with TickerProviderStateMixin {
   late TabController tabController;
-  OrderRepository orderRepo = new OrderRepository();
-  List<Order> _orderList = [];
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-    getOrders();
     tabController = TabController(length: 3, vsync: this, initialIndex: 0);
-  }
-
-  getOrders() async {
-    var list = await orderRepo.getOrders();
-    setState(() {
-      _orderList = list;
-    });
   }
 
   @override

@@ -31,9 +31,9 @@ class _SellerOrderDetailsPageState extends State<SellerOrderDetailsPage>
   }
 
   getOrders() async {
-    var list = await orderRepo.getOrders();
+    // var list = await orderRepo.getOrders();
     setState(() {
-      _orderList = list;
+      // _orderList = list;
     });
   }
 

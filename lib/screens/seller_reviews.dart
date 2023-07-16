@@ -2,13 +2,11 @@ import 'package:flutter/material.dart';
 // import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sizer2/sizer2.dart';
-import 'package:vin_ecommerce/data/order_repository.dart';
-import 'package:vin_ecommerce/styles/app_assets.dart';
+import 'package:vin_ecommerce/data/review_repository.dart';
+import 'package:vin_ecommerce/models/review_model.dart';
 import 'package:vin_ecommerce/styles/color.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:vin_ecommerce/main.dart';
-
-import '../../models/order_model.dart';
 
 class SellerReviewsPage extends StatefulWidget {
   const SellerReviewsPage({super.key});
@@ -19,13 +17,22 @@ class SellerReviewsPage extends StatefulWidget {
 class _SellerReviewsPageState extends State<SellerReviewsPage>
     with TickerProviderStateMixin {
   late TabController tabController;
-  OrderRepository orderRepo = new OrderRepository();
+  ReviewRepository reviewRepo = new ReviewRepository();
+  List<Review> _reviewList = [];
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
+    getReviews();
     tabController = TabController(length: 1, vsync: this, initialIndex: 0);
+  }
+
+  getReviews() async {
+    var list = await reviewRepo.getReviews();
+    setState(() {
+      _reviewList = list;
+    });
   }
 
   @override
@@ -43,8 +50,10 @@ class _SellerReviewsPageState extends State<SellerReviewsPage>
             ListView.builder(
                 physics: BouncingScrollPhysics(),
                 shrinkWrap: true,
-                itemCount: 1,
+                itemCount: _reviewList.length,
                 itemBuilder: (context, index) {
+                  Review review = _reviewList[index];
+
                   return Container(
                     margin: EdgeInsets.only(top: 16, right: 16, left: 16),
                     child: Container(
@@ -57,8 +66,9 @@ class _SellerReviewsPageState extends State<SellerReviewsPage>
                               child: CircleAvatar(
                                 radius: 3.4
                                     .h, // Set the desired radius for the circular image
-                                backgroundImage: AssetImage(
-                                    'assets/images/default_store.png'),
+                                backgroundImage: NetworkImage(
+                                  review.getCustomerAvatarUrl().toString(),
+                                ),
                               ),
                             ),
                             Container(
@@ -84,7 +94,9 @@ class _SellerReviewsPageState extends State<SellerReviewsPage>
                                           children: [
                                             Flexible(
                                               child: Text(
-                                                'Nguyễn Ngọc Thịnh',
+                                                review
+                                                    .getCustomerName()
+                                                    .toString(),
                                                 style: TextStyle(
                                                     fontWeight: FontWeight.bold,
                                                     fontSize: 16),
@@ -103,8 +115,9 @@ class _SellerReviewsPageState extends State<SellerReviewsPage>
                                       ignoring:
                                           true, // Disable rating interaction
                                       child: RatingBar.builder(
-                                        initialRating:
-                                            4, // Replace with your numeric value
+                                        initialRating: review
+                                            .getRate()!
+                                            .toDouble(), // Replace with your numeric value
                                         minRating: 1,
                                         direction: Axis.horizontal,
                                         allowHalfRating: true,
@@ -127,7 +140,7 @@ class _SellerReviewsPageState extends State<SellerReviewsPage>
                                       children: [
                                         Flexible(
                                           child: Text(
-                                            'Đồ ăn khá ngon và đa dạng.',
+                                            review.getComment().toString(),
                                             style: TextStyle(
                                                 color: secondaryTextColor,
                                                 fontSize: 14),

@@ -5,6 +5,7 @@ import 'dart:io';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sizer2/sizer2.dart';
 import 'package:vin_ecommerce/screens/seller_bottom_navbar.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 
 import 'package:vin_ecommerce/styles/button_style.dart';
 import 'package:vin_ecommerce/styles/color.dart';
@@ -23,6 +24,7 @@ class _SellerPersonalInfoPageState extends State<SellerPersonalInfoPage> {
   TextEditingController passwordController = TextEditingController();
   bool passenable = true;
   XFile? myImage = null;
+  String imageUrl = '';
 
   void login(String phone, String password) async {
     try {
@@ -121,12 +123,36 @@ class _SellerPersonalInfoPageState extends State<SellerPersonalInfoPage> {
                           backgroundColor: Colors.white,
                         ),
                         onPressed: () async {
+                          //Step 1: Pick image
                           final ImagePicker _picker = ImagePicker();
                           myImage = await _picker.pickImage(
                               source: ImageSource.gallery);
                           print('${myImage?.path}');
-                          setState(
-                              () {}); // Call setState to update the UI after picking an image
+
+                          String uniqueFileName =
+                              DateTime.now().millisecondsSinceEpoch.toString();
+
+                          //Step 2: Upload image to firebase storage
+                          Reference referenceRoot =
+                              FirebaseStorage.instance.ref();
+                          Reference referenceDirImages =
+                              referenceRoot.child('images');
+
+                          Reference referenceImageToUpload =
+                              referenceDirImages.child(uniqueFileName);
+
+                          //Handle error/success
+                          try {
+                            //Store the file
+                            await referenceImageToUpload
+                                .putFile(File(myImage!.path));
+                            //Success
+                            imageUrl =
+                                await referenceImageToUpload.getDownloadURL();
+                            print(imageUrl);
+                          } catch (error) {
+                            //Error occur
+                          }
                         },
                         child: CircleAvatar(
                           radius: 8.h,

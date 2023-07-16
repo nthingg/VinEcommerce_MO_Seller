@@ -1,6 +1,5 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
-// import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sizer2/sizer2.dart';
 import 'package:vin_ecommerce/styles/button_style.dart';
@@ -29,13 +28,32 @@ class _SignInPageState extends State<SignInPage> {
     _loading = value;
   }
 
+  @override
+  void initState() {
+    super.initState();
+    checkToken();
+  }
+
+  Future<void> checkToken() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    var token = prefs.getString('token');
+    if (token != null) {
+      Navigator.pushAndRemoveUntil(
+        context,
+        MaterialPageRoute(builder: (_) => BottomNavBar()),
+        (route) => false,
+      );
+    }
+  }
+
   // final storage = new FlutterSecureStorage();
   void login(String phone, String password) async {
     try {
       var body = {"phone": phone, "password": password};
       var headers = {'Content-Type': 'application/json'};
       http.Response response = await http.post(
-          Uri.parse('https://vinecommerce.bsite.net/api/StoreStaff/Authorize'),
+          Uri.parse(
+              'https://vinecommerce.bsite.net/api/store-staffs/authorize'),
           headers: headers,
           body: json.encode(body));
       // http.StreamedResponse response = await request.send();

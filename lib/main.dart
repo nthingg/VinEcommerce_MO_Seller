@@ -1,8 +1,6 @@
 // import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:sizer2/sizer2.dart';
-import 'dart:io';
-import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 
 import 'package:vin_ecommerce/screens/sign_in_page.dart';
 import 'package:vin_ecommerce/screens/seller_orders.dart';
@@ -37,7 +35,7 @@ class MainApp extends StatelessWidget {
       return MaterialApp(
         title: 'VinEcom',
         debugShowCheckedModeBanner: false,
-        home: BottomNavBar(),
+        home: SignInPage(),
       );
     });
   }

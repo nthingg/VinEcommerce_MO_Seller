@@ -32,9 +32,9 @@ class _SellerRequestOrderDetailsPageState
   }
 
   getOrders() async {
-    var list = await orderRepo.getOrders();
+    // var list = await orderRepo.getOrders();
     setState(() {
-      _orderList = list;
+      // _orderList = list;
     });
   }
 

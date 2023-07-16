@@ -128,31 +128,6 @@ class _SellerProductInfoPageState extends State<SellerProductInfoPage> {
                             style: TextStyle(color: primaryColor),
                           ),
                         ),
-                        Container(
-                          child: Container(
-                            child: Row(
-                              children: [
-                                Image.asset('assets/images/star.png'),
-                                SizedBox(
-                                  width: 4,
-                                ),
-                                Text(
-                                  '4.0',
-                                  style: TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                      color: primaryColor),
-                                ),
-                                SizedBox(
-                                  width: 10,
-                                ),
-                                Text(
-                                  '(' + '12' + ' Đánh giá)',
-                                  style: TextStyle(color: secondaryTextColor),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ),
                       ],
                     ),
                   ),

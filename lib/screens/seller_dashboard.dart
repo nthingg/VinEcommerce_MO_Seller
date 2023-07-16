@@ -1,17 +1,20 @@
-import 'dart:convert';
 import 'package:flutter/material.dart';
-// import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sizer2/sizer2.dart';
+
 import 'package:vin_ecommerce/screens/seller_orders.dart';
 import 'package:vin_ecommerce/screens/seller_orders_request.dart';
 import 'package:vin_ecommerce/screens/seller_reviews.dart';
 
-import 'package:vin_ecommerce/styles/button_style.dart';
-import 'package:vin_ecommerce/styles/color.dart';
-import 'package:vin_ecommerce/styles/square_title.dart';
+import 'package:vin_ecommerce/data/review_repository.dart';
+import 'package:vin_ecommerce/models/review_model.dart';
+import 'package:vin_ecommerce/data/store-staff_repository.dart';
+import 'package:vin_ecommerce/models/store-staff_model.dart';
+import 'package:vin_ecommerce/data/order_repository.dart';
+import 'package:vin_ecommerce/models/order_model.dart';
 
-import 'package:http/http.dart' as http;
+import 'package:vin_ecommerce/styles/color.dart';
+import 'package:vin_ecommerce/util/util.dart';
 
 class SellerDashboardPage extends StatefulWidget {
   const SellerDashboardPage({super.key});
@@ -21,6 +24,36 @@ class SellerDashboardPage extends StatefulWidget {
 }
 
 class _SellerDashboardPageState extends State<SellerDashboardPage> {
+  ReviewRepository reviewRepo = new ReviewRepository();
+  StoreStaffRepository staffRepo = new StoreStaffRepository();
+  OrderRepository orderRepo = new OrderRepository();
+  List<Review> _reviewList = [];
+  StoreStaff? staff;
+  int totalPending = 0;
+  int totalHandled = 0;
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    getReviews();
+    // getStaff();
+  }
+
+  getReviews() async {
+    var storeStaff = await staffRepo.getStaff();
+    var list = await reviewRepo.getReviews();
+    var pending = await orderRepo.getTotalPendingOrders();
+    var done = await orderRepo.getTotalDoneOrders();
+    var cancel = await orderRepo.getTotalCancelOrders();
+    setState(() {
+      _reviewList = list;
+      staff = storeStaff;
+      totalPending = pending;
+      totalHandled = done + cancel;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
@@ -40,19 +73,7 @@ class _SellerDashboardPageState extends State<SellerDashboardPage> {
                       child: Row(
                         children: [
                           Container(
-                            child: RawMaterialButton(
-                              fillColor: Color(0xffECF0F4),
-                              shape: CircleBorder(),
-                              onPressed: () {
-                                getValidation();
-                              },
-                              child: Image.asset(
-                                'assets/images/menu_tab_icon.png',
-                                scale: 1,
-                              ),
-                            ),
-                          ),
-                          Container(
+                            margin: EdgeInsets.only(left: 8.w),
                             width: 54.w, // Set the desired width for the Column
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
@@ -60,7 +81,7 @@ class _SellerDashboardPageState extends State<SellerDashboardPage> {
                                 Padding(
                                   padding: EdgeInsets.only(top: 4),
                                   child: Text(
-                                    'NHÀ HÀNG NGỌC THỊNH',
+                                    staff?.getStoreName()?.toString() ?? '',
                                     style: TextStyle(
                                       fontWeight: FontWeight.bold,
                                       color: primaryColor,
@@ -70,7 +91,7 @@ class _SellerDashboardPageState extends State<SellerDashboardPage> {
                                 Container(
                                   margin: EdgeInsets.only(top: 8),
                                   child: Text(
-                                    'S1.101',
+                                    staff?.getName()?.toString() ?? '',
                                     style: TextStyle(
                                         fontSize: 14,
                                         fontWeight: FontWeight.w500),
@@ -80,18 +101,22 @@ class _SellerDashboardPageState extends State<SellerDashboardPage> {
                             ),
                           ),
                           Container(
+                            margin: EdgeInsets.only(left: 12.w),
                             child: RawMaterialButton(
-                                fillColor: Color(0xffECF0F4),
-                                shape: CircleBorder(),
-                                onPressed: () {
-                                  getValidation();
-                                },
-                                child: CircleAvatar(
-                                  radius:
-                                      24, // Set the desired radius for the circular image
-                                  backgroundImage: AssetImage(
-                                      'assets/images/default_store.png'),
-                                )),
+                              fillColor: Color(0xffECF0F4),
+                              shape: CircleBorder(),
+                              onPressed: () {
+                                getValidation();
+                              },
+                              child: CircleAvatar(
+                                radius:
+                                    24, // Set the desired radius for the circular image
+                                backgroundImage: NetworkImage(
+                                  staff?.getStoreAvatarUrl()?.toString() ??
+                                      'https://htmlcolorcodes.com/assets/images/colors/gray-color-solid-background-1920x1080.png',
+                                ),
+                              ),
+                            ),
                           ),
                         ],
                       ),
@@ -127,7 +152,7 @@ class _SellerDashboardPageState extends State<SellerDashboardPage> {
                             children: [
                               Container(
                                 child: Text(
-                                  '20',
+                                  totalHandled.toString(),
                                   style: TextStyle(
                                       fontSize: 60,
                                       fontWeight: FontWeight.bold),
@@ -165,7 +190,7 @@ class _SellerDashboardPageState extends State<SellerDashboardPage> {
                             children: [
                               Container(
                                 child: Text(
-                                  '5',
+                                  totalPending.toString(),
                                   style: TextStyle(
                                       fontSize: 60,
                                       fontWeight: FontWeight.bold),
@@ -269,7 +294,8 @@ class _SellerDashboardPageState extends State<SellerDashboardPage> {
                                         width: 12,
                                       ),
                                       Text(
-                                        '4.5',
+                                        calculateTotalRate(_reviewList)
+                                            .toString(),
                                         style: TextStyle(
                                             fontWeight: FontWeight.bold,
                                             color: primaryColor,
@@ -279,7 +305,9 @@ class _SellerDashboardPageState extends State<SellerDashboardPage> {
                                         width: 12,
                                       ),
                                       Text(
-                                        'Tổng 20 đánh giá',
+                                        'Tổng ' +
+                                            _reviewList.length.toString() +
+                                            ' đánh giá',
                                         style: TextStyle(
                                             color: secondaryTextColor),
                                       ),
