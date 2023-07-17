@@ -135,8 +135,15 @@ class _SellerDashboardPageState extends State<SellerDashboardPage> {
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceAround,
                     children: [
-                      InkWell(
-                        onTap: () {
+                      ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                            padding: EdgeInsets.zero, // Remove default padding
+                            shape: RoundedRectangleBorder(
+                              // Add a rounded shape if desired
+                              borderRadius: BorderRadius.circular(8.0),
+                            ),
+                            backgroundColor: Colors.white),
+                        onPressed: () async {
                           Navigator.push(
                               context,
                               MaterialPageRoute(
@@ -148,8 +155,6 @@ class _SellerDashboardPageState extends State<SellerDashboardPage> {
                           padding: EdgeInsets.only(
                               right: 2.h, left: 2.h, top: 1.h, bottom: 2.h),
                           decoration: BoxDecoration(
-                            color: Colors
-                                .white, // Set the desired background color
                             borderRadius: BorderRadius.all(Radius.circular(8)),
                           ),
                           child: Column(
@@ -159,22 +164,31 @@ class _SellerDashboardPageState extends State<SellerDashboardPage> {
                                   totalHandled.toString(),
                                   style: TextStyle(
                                       fontSize: 60,
-                                      fontWeight: FontWeight.bold),
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.black),
                                 ),
                               ),
                               Container(
                                 margin: EdgeInsets.only(top: 2.w),
                                 child: Text(
                                   'Đơn đã xử lý',
-                                  style: TextStyle(fontSize: 16),
+                                  style: TextStyle(
+                                      fontSize: 16, color: Colors.black),
                                 ),
                               ),
                             ],
                           ),
                         ),
                       ),
-                      InkWell(
-                        onTap: () {
+                      ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                            padding: EdgeInsets.zero, // Remove default padding
+                            shape: RoundedRectangleBorder(
+                              // Add a rounded shape if desired
+                              borderRadius: BorderRadius.circular(8.0),
+                            ),
+                            backgroundColor: Colors.white),
+                        onPressed: () async {
                           Navigator.push(
                               context,
                               MaterialPageRoute(
@@ -197,14 +211,16 @@ class _SellerDashboardPageState extends State<SellerDashboardPage> {
                                   totalPending.toString(),
                                   style: TextStyle(
                                       fontSize: 60,
-                                      fontWeight: FontWeight.bold),
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.black),
                                 ),
                               ),
                               Container(
                                 margin: EdgeInsets.only(top: 2.w),
                                 child: Text(
                                   'Đơn đến',
-                                  style: TextStyle(fontSize: 16),
+                                  style: TextStyle(
+                                      fontSize: 16, color: Colors.black),
                                 ),
                               ),
                             ],
