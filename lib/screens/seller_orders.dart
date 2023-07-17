@@ -26,6 +26,7 @@ class _SellerOrdersPageState extends State<SellerOrdersPage>
     // TODO: implement initState
     super.initState();
     getDoneOrders();
+    getCancelOrders();
     tabController = TabController(length: 2, vsync: this, initialIndex: 0);
   }
 
@@ -272,15 +273,24 @@ class _SellerOrdersPageState extends State<SellerOrdersPage>
                     // main();
 
                     return Container(
-                      margin: EdgeInsets.only(top: 12, bottom: 12),
-                      child: InkWell(
-                        onTap: () {
+                      margin: EdgeInsets.only(
+                          top: 12, bottom: 12, left: 12, right: 12),
+                      child: ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                            padding: EdgeInsets.zero, // Remove default padding
+                            shape: RoundedRectangleBorder(
+                              // Add a rounded shape if desired
+                              borderRadius: BorderRadius.circular(8.0),
+                            ),
+                            backgroundColor: Colors.white),
+                        onPressed: () async {
                           Navigator.push(
                             context,
                             MaterialPageRoute(
-                                builder: (context) => SellerOrderDetailsPage(
-                                      orderId: orderId,
-                                    )),
+                              builder: (context) => SellerOrderDetailsPage(
+                                orderId: orderId,
+                              ),
+                            ),
                           );
                         },
                         child: Container(
@@ -302,12 +312,14 @@ class _SellerOrdersPageState extends State<SellerOrdersPage>
                                             Text(
                                               'ĐƠN #',
                                               style: TextStyle(
-                                                  fontWeight: FontWeight.bold),
+                                                  fontWeight: FontWeight.bold,
+                                                  color: Colors.black),
                                             ),
                                             Text(
                                               order.getId().toString(),
                                               style: TextStyle(
-                                                  fontWeight: FontWeight.bold),
+                                                  fontWeight: FontWeight.bold,
+                                                  color: Colors.black),
                                             ),
                                             Container(
                                               margin: EdgeInsets.only(left: 12),
@@ -357,7 +369,8 @@ class _SellerOrdersPageState extends State<SellerOrdersPage>
                                                       .toString(),
                                                   style: TextStyle(
                                                       fontWeight:
-                                                          FontWeight.bold),
+                                                          FontWeight.bold,
+                                                      color: Colors.black),
                                                 ),
                                               ],
                                             ),
@@ -393,7 +406,8 @@ class _SellerOrdersPageState extends State<SellerOrdersPage>
                                                       .toString(),
                                                   style: TextStyle(
                                                       fontWeight:
-                                                          FontWeight.bold),
+                                                          FontWeight.bold,
+                                                      color: Colors.black),
                                                 ),
                                               ],
                                             ),
@@ -427,16 +441,14 @@ class _SellerOrdersPageState extends State<SellerOrdersPage>
                                   ),
                                 ),
                                 Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
                                     Container(
-                                      margin: EdgeInsets.only(left: 6.w),
                                       child: Text(
                                         order.getTotal().toString() + ' VND',
                                         style: TextStyle(
-                                          fontWeight: FontWeight.bold,
-                                          fontSize: 18,
-                                        ),
+                                            fontWeight: FontWeight.bold,
+                                            fontSize: 18,
+                                            color: Colors.black),
                                       ),
                                     ),
                                   ],
