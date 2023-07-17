@@ -11,14 +11,15 @@ import 'package:vin_ecommerce/styles/color.dart';
 
 import 'package:http/http.dart' as http;
 
-class SellerAddProductPage extends StatefulWidget {
-  const SellerAddProductPage({super.key});
+class SellerUpdateProductPage extends StatefulWidget {
+  const SellerUpdateProductPage({super.key});
 
   @override
-  State<SellerAddProductPage> createState() => _SellerAddProductPageState();
+  State<SellerUpdateProductPage> createState() =>
+      _SellerUpdateProductPageState();
 }
 
-class _SellerAddProductPageState extends State<SellerAddProductPage> {
+class _SellerUpdateProductPageState extends State<SellerUpdateProductPage> {
   List<String> categories = ['Đồ ăn', 'Thức uống', 'Nhu yếu phẩm'];
   String selectedCategory =
       ''; // Declare a variable to hold the selected category
@@ -273,6 +274,48 @@ class _SellerAddProductPageState extends State<SellerAddProductPage> {
                                     ),
                                   ],
                                 ),
+                                Column(
+                                  children: [
+                                    Padding(
+                                      padding: EdgeInsets.only(top: 3.h),
+                                      child: Container(
+                                        width: 20.h,
+                                        alignment: Alignment.topLeft,
+                                        child: Text(
+                                          'GIÁ SAU GIẢM',
+                                          style: TextStyle(fontSize: 14),
+                                        ),
+                                      ),
+                                    ),
+                                    Padding(
+                                      padding: const EdgeInsets.only(top: 8),
+                                      child: Container(
+                                        width: 20.h,
+                                        child: TextField(
+                                          controller: passwordController,
+                                          decoration: InputDecoration(
+                                            enabledBorder: OutlineInputBorder(
+                                                borderSide: BorderSide(
+                                                    color: Colors.white)),
+                                            focusedBorder: OutlineInputBorder(
+                                                borderSide: BorderSide(
+                                                    color: Colors.orange,
+                                                    width: 1.5)),
+
+                                            // border: OutlineInputBorder(),
+                                            // hintText: "Input Phone here",
+                                            fillColor: Color(0xffF0F5FA),
+                                            filled: true,
+                                          ),
+                                          autofocus: false,
+                                          textAlignVertical:
+                                              TextAlignVertical.center,
+                                        ),
+                                        height: 64,
+                                      ),
+                                    ),
+                                  ],
+                                )
                               ]),
                         ),
                         Padding(
