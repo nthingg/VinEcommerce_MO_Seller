@@ -2,7 +2,6 @@ import 'dart:convert';
 
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:vin_ecommerce/models/product_model.dart';
-import 'package:vin_ecommerce/models/review_model.dart';
 import 'package:http/http.dart' as http;
 import 'package:vin_ecommerce/constants/apiclient.dart';
 import 'package:vin_ecommerce/services/product_service.dart';

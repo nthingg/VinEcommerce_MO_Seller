@@ -5,7 +5,6 @@ import 'package:vin_ecommerce/screens/seller_bottom_navbar.dart';
 
 import 'package:vin_ecommerce/screens/seller_orders.dart';
 import 'package:vin_ecommerce/screens/seller_orders_request.dart';
-import 'package:vin_ecommerce/screens/seller_profile.dart';
 import 'package:vin_ecommerce/screens/seller_reviews.dart';
 
 import 'package:vin_ecommerce/data/review_repository.dart';
@@ -13,7 +12,6 @@ import 'package:vin_ecommerce/models/review_model.dart';
 import 'package:vin_ecommerce/data/store-staff_repository.dart';
 import 'package:vin_ecommerce/models/store-staff_model.dart';
 import 'package:vin_ecommerce/data/order_repository.dart';
-import 'package:vin_ecommerce/models/order_model.dart';
 
 import 'package:vin_ecommerce/styles/color.dart';
 import 'package:vin_ecommerce/util/util.dart';
@@ -38,11 +36,11 @@ class _SellerDashboardPageState extends State<SellerDashboardPage> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    getReviews();
+    getDatas();
     // getStaff();
   }
 
-  getReviews() async {
+  getDatas() async {
     var storeStaff = await staffRepo.getStaff();
     var list = await reviewRepo.getReviews();
     var pending = await orderRepo.getTotalPendingOrders();

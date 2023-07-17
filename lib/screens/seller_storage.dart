@@ -5,7 +5,6 @@ import 'package:sizer2/sizer2.dart';
 import 'package:vin_ecommerce/data/product_repository.dart';
 import 'package:vin_ecommerce/data/store-staff_repository.dart';
 import 'package:vin_ecommerce/models/product_model.dart';
-import 'package:vin_ecommerce/models/store-staff_model.dart';
 import 'package:vin_ecommerce/styles/color.dart';
 
 import 'seller_product_info.dart';
@@ -64,12 +63,13 @@ class _SellerStoragePageState extends State<SellerStoragePage>
                       return Container(
                         child: InkWell(
                           onTap: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => SellerProductInfoPage(
-                                        productId: 6,
-                                      )),
+                            Navigator.of(context).pushNamed(
+                              '/productInfo',
+                              arguments: {
+                                'productId': _product.getId(),
+                                'orderId': 0,
+                                'fatherRoute': '/storage',
+                              },
                             );
                           },
                           child: Container(
@@ -175,12 +175,13 @@ class _SellerStoragePageState extends State<SellerStoragePage>
                       return Container(
                         child: InkWell(
                           onTap: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => SellerProductInfoPage(
-                                        productId: 6,
-                                      )),
+                            Navigator.of(context).pushNamed(
+                              '/productInfo',
+                              arguments: {
+                                'productId': _product.getId(),
+                                'orderId': 0,
+                                'fatherRoute': '/storage',
+                              },
                             );
                           },
                           child: Container(
@@ -286,12 +287,13 @@ class _SellerStoragePageState extends State<SellerStoragePage>
                       return Container(
                         child: InkWell(
                           onTap: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => SellerProductInfoPage(
-                                        productId: 6,
-                                      )),
+                            Navigator.of(context).pushNamed(
+                              '/productInfo',
+                              arguments: {
+                                'productId': _product.getId(),
+                                'orderId': 0,
+                                'fatherRoute': '/storage',
+                              },
                             );
                           },
                           child: Container(

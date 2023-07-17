@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
-// import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sizer2/sizer2.dart';
-import 'package:vin_ecommerce/styles/app_assets.dart';
 import 'package:vin_ecommerce/styles/color.dart';
 
 import 'seller_product_info.dart';
@@ -43,13 +41,13 @@ class _SellerNotificationsPageState extends State<SellerNotificationsPage>
                 itemBuilder: (context, index) {
                   return InkWell(
                     onTap: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => SellerProductInfoPage(
-                                  productId: 6,
-                                )),
-                      );
+                      // Navigator.push(
+                      //   context,
+                      //   MaterialPageRoute(
+                      //       builder: (context) => SellerProductInfoPage(
+                      //             productId: 6,
+                      //           )),
+                      // );
                     },
                     child: Container(
                       margin: EdgeInsets.only(top: 12, left: 16),
@@ -168,13 +166,13 @@ class _SellerNotificationsPageState extends State<SellerNotificationsPage>
                 itemBuilder: (context, index) {
                   return InkWell(
                     onTap: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => SellerProductInfoPage(
-                                  productId: 6,
-                                )),
-                      );
+                      // Navigator.push(
+                      //   context,
+                      //   MaterialPageRoute(
+                      //       builder: (context) => SellerProductInfoPage(
+                      //             productId: 6,
+                      //           )),
+                      // );
                     },
                     child: Container(
                       margin: EdgeInsets.only(top: 12, right: 16, left: 16),

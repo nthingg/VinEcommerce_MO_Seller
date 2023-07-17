@@ -4,7 +4,6 @@ import 'package:sizer2/sizer2.dart';
 import 'package:vin_ecommerce/data/order_repository.dart';
 import 'package:vin_ecommerce/main.dart';
 import 'package:vin_ecommerce/screens/seller_order_details.dart';
-import 'package:vin_ecommerce/styles/app_assets.dart';
 import 'package:vin_ecommerce/styles/color.dart';
 
 import '../../models/order_model.dart';

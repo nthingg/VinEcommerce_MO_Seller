@@ -33,7 +33,7 @@ class OrderSpec {
         OrderDate = json['orderDate'],
         ShipFee = json['shipFee'],
         CustomerName = json['customer']['name'],
-        ShipperName = json['shipper']['name'],
+        ShipperName = json['shipper'] != null ? json['shipper']['name'] : null,
         Status = json['status']['displayName'],
         FromBuildingName = json['fromBuilding']['name'],
         ToBuildingName = json['toBuilding']['name'];

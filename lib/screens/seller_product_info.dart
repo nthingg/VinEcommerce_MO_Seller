@@ -1,23 +1,23 @@
-import 'dart:convert';
 import 'package:flutter/material.dart';
 // import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sizer2/sizer2.dart';
 import 'package:vin_ecommerce/data/product_repository.dart';
 import 'package:vin_ecommerce/models/product_model.dart';
-import 'package:vin_ecommerce/screens/seller_storage.dart';
 import 'package:vin_ecommerce/screens/seller_bottom_navbar.dart';
 
-import 'package:vin_ecommerce/styles/button_style.dart';
 import 'package:vin_ecommerce/styles/color.dart';
-import 'package:vin_ecommerce/styles/square_title.dart';
-
-import 'package:http/http.dart' as http;
 
 class SellerProductInfoPage extends StatefulWidget {
   final int productId;
+  final int orderId;
+  final String fatherRoute;
 
-  const SellerProductInfoPage({Key? key, required this.productId})
+  const SellerProductInfoPage(
+      {Key? key,
+      required this.productId,
+      required this.orderId,
+      required this.fatherRoute})
       : super(key: key);
 
   @override
@@ -25,8 +25,6 @@ class SellerProductInfoPage extends StatefulWidget {
 }
 
 class _SellerProductInfoPageState extends State<SellerProductInfoPage> {
-  String salePrice = '100.000';
-
   ProductRepository productRepo = new ProductRepository();
   Product? _product;
 
@@ -34,7 +32,7 @@ class _SellerProductInfoPageState extends State<SellerProductInfoPage> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    getProduct(6);
+    getProduct(widget.productId);
   }
 
   getProduct(int productId) async {
@@ -42,6 +40,26 @@ class _SellerProductInfoPageState extends State<SellerProductInfoPage> {
     setState(() {
       _product = product;
     });
+  }
+
+  void navigateBackToFatherClass() {
+    if (widget.fatherRoute == '/orderRequestDetails') {
+      Navigator.of(context).pushNamed(
+        '/orderRequestDetails',
+        arguments: {
+          'orderId': widget.orderId,
+        },
+      );
+    } else if (widget.fatherRoute == '/orderDetails') {
+      Navigator.of(context).pushNamed(
+        '/orderDetails',
+        arguments: {
+          'orderId': widget.orderId,
+        },
+      );
+    } else {
+      Navigator.of(context).pushNamed('/storage');
+    }
   }
 
   @override
@@ -68,13 +86,7 @@ class _SellerProductInfoPageState extends State<SellerProductInfoPage> {
                                   fillColor: Color(0xffECF0F4),
                                   shape: CircleBorder(),
                                   onPressed: () {
-                                    Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                          builder: (context) => BottomNavBar(
-                                                initialIndex: 1,
-                                              )),
-                                    );
+                                    navigateBackToFatherClass();
                                   },
                                   child: Image.asset(
                                     'assets/images/back.png',

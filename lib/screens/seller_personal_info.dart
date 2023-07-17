@@ -214,7 +214,7 @@ class _SellerPersonalInfoPageState extends State<SellerPersonalInfoPage> {
                           child: Container(
                             alignment: Alignment.topLeft,
                             child: Text(
-                              'SỐ ĐIỆN THOẠI',
+                              'EMAIL',
                               style: TextStyle(fontSize: 14),
                             ),
                           ),

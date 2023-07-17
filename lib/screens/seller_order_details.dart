@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sizer2/sizer2.dart';
 import 'package:vin_ecommerce/data/order_detail_repository.dart';
 import 'package:vin_ecommerce/models/order_detail_model.dart';
@@ -25,12 +24,13 @@ class _SellerOrderDetailsPageState extends State<SellerOrderDetailsPage>
   OrderDetailRepository orderDetailRepo = new OrderDetailRepository();
   List<OrderDetail> _orderDetailList = [];
   OrderSpec? _orderSpec;
+  String? formattedDate;
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-    getOrderDetails(13);
+    getOrderDetails(widget.orderId);
     tabController = TabController(length: 1, vsync: this, initialIndex: 0);
   }
 
@@ -40,7 +40,14 @@ class _SellerOrderDetailsPageState extends State<SellerOrderDetailsPage>
     setState(() {
       _orderDetailList = list;
       _orderSpec = spec;
+      String originalDate = _orderSpec?.getOrderDate()?.toString() ?? '';
+      DateTime dateTime = DateTime.parse(originalDate);
+      formattedDate = formatDate(dateTime, 'yyyy-MM-dd HH:mm:ss');
     });
+  }
+
+  String formatDate(DateTime dateTime, String format) {
+    return "${dateTime.year.toString().padLeft(4, '0')}-${dateTime.month.toString().padLeft(2, '0')}-${dateTime.day.toString().padLeft(2, '0')} ${dateTime.hour.toString().padLeft(2, '0')}:${dateTime.minute.toString().padLeft(2, '0')}:${dateTime.second.toString().padLeft(2, '0')}";
   }
 
   @override
@@ -63,12 +70,13 @@ class _SellerOrderDetailsPageState extends State<SellerOrderDetailsPage>
                   margin: EdgeInsets.only(top: 4),
                   child: InkWell(
                     onTap: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => SellerProductInfoPage(
-                                  productId: 6,
-                                )),
+                      Navigator.of(context).pushNamed(
+                        '/productInfo',
+                        arguments: {
+                          'productId': orderDetail.getProductId(),
+                          'orderId': _orderSpec!.getId(),
+                          'fatherRoute': '/orderDetails',
+                        },
                       );
                     },
                     child: Container(
@@ -273,7 +281,7 @@ class _SellerOrderDetailsPageState extends State<SellerOrderDetailsPage>
                 Container(
                   width: 28.5.w,
                   child: Text(
-                    'Ngày giao: ',
+                    'Ngày đặt: ',
                     style: TextStyle(
                       fontSize: 16,
                       color: primaryColor,
@@ -282,7 +290,7 @@ class _SellerOrderDetailsPageState extends State<SellerOrderDetailsPage>
                   ),
                 ),
                 Text(
-                  (_orderSpec?.getOrderDate()?.toString() ?? ''),
+                  (formattedDate?.toString() ?? ''),
                   style: TextStyle(
                     fontSize: 16,
                     fontFamily: 'SF Pro Text',

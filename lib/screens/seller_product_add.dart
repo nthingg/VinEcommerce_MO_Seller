@@ -5,13 +5,9 @@ import 'package:image_picker/image_picker.dart';
 import 'dart:io';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sizer2/sizer2.dart';
-import 'package:vin_ecommerce/screens/seller_orders.dart';
-import 'package:vin_ecommerce/screens/seller_orders_request.dart';
-import 'package:vin_ecommerce/screens/seller_reviews.dart';
 
 import 'package:vin_ecommerce/styles/button_style.dart';
 import 'package:vin_ecommerce/styles/color.dart';
-import 'package:vin_ecommerce/styles/square_title.dart';
 
 import 'package:http/http.dart' as http;
 

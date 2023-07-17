@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:sizer2/sizer2.dart';
-import 'dart:io';
+
 import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 
 import 'package:vin_ecommerce/screens/seller_dashboard.dart';
