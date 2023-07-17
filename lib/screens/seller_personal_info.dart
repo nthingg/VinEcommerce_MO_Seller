@@ -5,12 +5,12 @@ import 'dart:io';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sizer2/sizer2.dart';
 import 'package:vin_ecommerce/screens/seller_bottom_navbar.dart';
-import 'package:firebase_storage/firebase_storage.dart';
 
 import 'package:vin_ecommerce/styles/button_style.dart';
 import 'package:vin_ecommerce/styles/color.dart';
 
 import 'package:http/http.dart' as http;
+import 'package:vin_ecommerce/util/util.dart';
 
 class SellerPersonalInfoPage extends StatefulWidget {
   const SellerPersonalInfoPage({super.key});
@@ -20,39 +20,14 @@ class SellerPersonalInfoPage extends StatefulWidget {
 }
 
 class _SellerPersonalInfoPageState extends State<SellerPersonalInfoPage> {
-  TextEditingController phoneController = TextEditingController();
+  TextEditingController nameController = TextEditingController();
+  TextEditingController emailController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
+  TextEditingController rePasswordController = TextEditingController();
   bool passenable = true;
   XFile? myImage = null;
-  String imageUrl = '';
-
-  void login(String phone, String password) async {
-    try {
-      var body = {"phone": phone, "password": password};
-      var headers = {'Content-Type': 'application/json'};
-      http.Response response = await http.post(
-          Uri.parse(
-              'http://www.vinecommerce.somee.com/api/StoreStaff/Authorize'),
-          headers: headers,
-          body: json.encode(body));
-      // http.StreamedResponse response = await request.send();
-      if (response.statusCode == 200) {
-        var data = json.decode(response.body.toString());
-        print(data['accessToken']);
-        // final SharedPreferences? prefs = await _prefs;
-        final SharedPreferences _prefs = await SharedPreferences.getInstance();
-        _prefs.setString('token', data['accessToken']);
-        // await storage.write(key: 'token', value: data['accessToken']);
-        // Navigator.pushAndRemoveUntil(context,
-        //     MaterialPageRoute(builder: (_) => HomeScreen()), (route) => false);
-      } else {
-        print('\n2\n');
-      }
-    } catch (e) {
-      print('3');
-      print(e.toString());
-    }
-  }
+  String imageUrl =
+      'https://htmlcolorcodes.com/assets/images/colors/gray-color-solid-background-1920x1080.png';
 
   @override
   Widget build(BuildContext context) {
@@ -128,31 +103,7 @@ class _SellerPersonalInfoPageState extends State<SellerPersonalInfoPage> {
                           myImage = await _picker.pickImage(
                               source: ImageSource.gallery);
                           print('${myImage?.path}');
-
-                          String uniqueFileName =
-                              DateTime.now().millisecondsSinceEpoch.toString();
-
-                          //Step 2: Upload image to firebase storage
-                          Reference referenceRoot =
-                              FirebaseStorage.instance.ref();
-                          Reference referenceDirImages =
-                              referenceRoot.child('images');
-
-                          Reference referenceImageToUpload =
-                              referenceDirImages.child(uniqueFileName);
-
-                          //Handle error/success
-                          try {
-                            //Store the file
-                            await referenceImageToUpload
-                                .putFile(File(myImage!.path));
-                            //Success
-                            imageUrl =
-                                await referenceImageToUpload.getDownloadURL();
-                            print(imageUrl);
-                          } catch (error) {
-                            //Error occur
-                          }
+                          setState(() {});
                         },
                         child: CircleAvatar(
                           radius: 8.h,
@@ -162,12 +113,6 @@ class _SellerPersonalInfoPageState extends State<SellerPersonalInfoPage> {
                         ),
                       ),
                     ),
-                  ),
-                  // selectedImage != null
-                  //     ? Image.file(selectedImage!)
-                  //     : Container(),
-                  const SizedBox(
-                    height: 10,
                   ),
                   Container(
                     width: size.width,
@@ -189,7 +134,7 @@ class _SellerPersonalInfoPageState extends State<SellerPersonalInfoPage> {
                           child: Container(
                             width: double.infinity,
                             child: TextField(
-                              controller: passwordController,
+                              controller: nameController,
                               decoration: InputDecoration(
                                 enabledBorder: OutlineInputBorder(
                                     borderSide:
@@ -224,7 +169,7 @@ class _SellerPersonalInfoPageState extends State<SellerPersonalInfoPage> {
                           child: Container(
                             width: double.infinity,
                             child: TextField(
-                              controller: passwordController,
+                              controller: emailController,
                               decoration: InputDecoration(
                                 enabledBorder: OutlineInputBorder(
                                     borderSide:
@@ -314,7 +259,7 @@ class _SellerPersonalInfoPageState extends State<SellerPersonalInfoPage> {
                           child: Container(
                             width: double.infinity,
                             child: TextField(
-                              controller: passwordController,
+                              controller: rePasswordController,
                               style: TextStyle(fontSize: 20),
                               decoration: InputDecoration(
                                   enabledBorder: OutlineInputBorder(
@@ -359,7 +304,9 @@ class _SellerPersonalInfoPageState extends State<SellerPersonalInfoPage> {
                           child: ElevatedButton(
                             style: elevatedButtonStyle.copyWith(),
                             child: Text('LƯU'),
-                            onPressed: () {
+                            onPressed: () async {
+                              imageUrl = await uploadImageToFireBase(myImage);
+
                               Navigator.pushAndRemoveUntil(
                                   context,
                                   MaterialPageRoute(

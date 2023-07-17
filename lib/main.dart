@@ -19,9 +19,15 @@ import 'package:vin_ecommerce/screens/seller_product_info.dart';
 import 'package:vin_ecommerce/screens/sign_up_page.dart';
 import 'package:vin_ecommerce/screens/seller_personal_info.dart';
 
+import 'package:firebase_core/firebase_core.dart';
+import 'firebase_options.dart';
+
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+
   runApp(
     const ProviderScope(child: MainApp()),
   );
@@ -36,7 +42,7 @@ class MainApp extends StatelessWidget {
       return MaterialApp(
         title: 'VinEcom',
         debugShowCheckedModeBanner: false,
-        home: SignInPage(),
+        home: SellerPersonalInfoPage(),
         onGenerateRoute: RouteGenerator.generatorRoute,
       );
     });

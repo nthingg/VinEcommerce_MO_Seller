@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "239947443318",
+    "firebase_url": "https://storestaff-vinecom-default-rtdb.asia-southeast1.firebasedatabase.app",
+    "project_id": "storestaff-vinecom",
+    "storage_bucket": "storestaff-vinecom.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:239947443318:android:3b0097a1b86fa043d0c357",
+        "android_client_info": {
+          "package_name": "com.flutter.vin_ecommerce"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "239947443318-aj0klq8i5mfompkq02b3c8cee70q1l2d.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDtTCq_JhYRWDQ9Ftaubrmzf2zRYHFnC3c"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "239947443318-aj0klq8i5mfompkq02b3c8cee70q1l2d.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "239947443318-dc9ua8l4f3fj79lqmql2eidgig8n8rbm.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.flutter.vinEcommerce"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

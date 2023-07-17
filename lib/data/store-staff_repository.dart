@@ -31,4 +31,32 @@ class StoreStaffRepository {
           'Failed to fetch review. Error code: ${response.statusCode}');
     }
   }
+
+  Future<bool> updateProfile(
+      String name, String? avatarUrl, String email) async {
+    try {
+      var body = {"name": name, "avatarUrl": avatarUrl, "email": email};
+
+      // Retrieve token from SharedPreferences
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      var token = prefs.getString('token');
+
+      var headers = {
+        'Authorization': 'Bearer $token',
+      };
+      http.Response response = await http.post(
+          Uri.parse(apiClient + getStaffInfo),
+          headers: headers,
+          body: json.encode(body));
+      if (response.statusCode == 200) {
+        return true;
+      } else {
+        print(response.statusCode);
+        return false;
+      }
+    } catch (e) {
+      print(e.toString());
+      return false;
+    }
+  }
 }
