@@ -4,7 +4,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:vin_ecommerce/models/order_model.dart';
 import 'package:http/http.dart' as http;
 import 'package:vin_ecommerce/constants/apiclient.dart';
-import 'package:vin_ecommerce/services/orderService.dart';
+import 'package:vin_ecommerce/services/order_service.dart';
 
 class OrderRepository {
   List<Order> orderList = [];
@@ -158,10 +158,4 @@ class OrderRepository {
           'Failed to fetch orders. Error code: ${response.statusCode}');
     }
   }
-
-  static List<Order> convert(List<dynamic> _orderList) {
-    return _orderList.map((e) => Order.fromJson(e)).toList();
-  }
-
-  List<Order> getOrderList() => this.orderList;
 }

@@ -4,7 +4,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:vin_ecommerce/models/review_model.dart';
 import 'package:http/http.dart' as http;
 import 'package:vin_ecommerce/constants/apiclient.dart';
-import 'package:vin_ecommerce/services/storeService.dart';
+import 'package:vin_ecommerce/services/store_service.dart';
 
 class ReviewRepository {
   List<Review> reviewList = [];
@@ -33,10 +33,4 @@ class ReviewRepository {
           'Failed to fetch orders. Error code: ${response.statusCode}');
     }
   }
-
-  static List<Review> convert(List<dynamic> _reviewList) {
-    return _reviewList.map((e) => Review.fromJson(e)).toList();
-  }
-
-  List<Review> getReviewList() => this.reviewList;
 }

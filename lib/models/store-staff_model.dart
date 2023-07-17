@@ -3,16 +3,18 @@ class StoreStaff {
   String? Phone;
   String? Email;
   String? AvatarUrl;
+  int? StoreId;
   String? StoreAvatarUrl;
   String? StoreName;
 
-  StoreStaff(this.Name, this.Phone, this.Email, this.AvatarUrl,
+  StoreStaff(this.Name, this.Phone, this.Email, this.AvatarUrl, this.StoreId,
       this.StoreAvatarUrl, this.StoreName);
 
   String? getName() => this.Name;
   String? getPhone() => this.Phone;
   String? getEmail() => this.Email;
   String? getAvatarUrl() => this.AvatarUrl;
+  int? getStoreId() => this.StoreId;
   String? getStoreAvatarUrl() => this.StoreAvatarUrl;
   String? getStoreName() => this.StoreName;
 
@@ -21,7 +23,7 @@ class StoreStaff {
         Phone = json['phone'],
         Email = json['email'],
         AvatarUrl = json['avatarUrl'],
-        StoreName =
-            json['store']['name'], // Assigning value from the JSON object
+        StoreId = json['store']['id'],
+        StoreName = json['store']['name'],
         StoreAvatarUrl = json['store']['imageUrl'];
 }

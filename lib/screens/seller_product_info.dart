@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 // import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sizer2/sizer2.dart';
+import 'package:vin_ecommerce/data/product_repository.dart';
+import 'package:vin_ecommerce/models/product_model.dart';
 import 'package:vin_ecommerce/screens/seller_storage.dart';
 import 'package:vin_ecommerce/screens/seller_bottom_navbar.dart';
 
@@ -13,7 +15,10 @@ import 'package:vin_ecommerce/styles/square_title.dart';
 import 'package:http/http.dart' as http;
 
 class SellerProductInfoPage extends StatefulWidget {
-  const SellerProductInfoPage({super.key});
+  final int productId;
+
+  const SellerProductInfoPage({Key? key, required this.productId})
+      : super(key: key);
 
   @override
   State<SellerProductInfoPage> createState() => _SellerProductInfoPageState();
@@ -21,6 +26,23 @@ class SellerProductInfoPage extends StatefulWidget {
 
 class _SellerProductInfoPageState extends State<SellerProductInfoPage> {
   String salePrice = '100.000';
+
+  ProductRepository productRepo = new ProductRepository();
+  Product? _product;
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    getProduct(6);
+  }
+
+  getProduct(int productId) async {
+    var product = await productRepo.getProductById(productId);
+    setState(() {
+      _product = product;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -85,8 +107,9 @@ class _SellerProductInfoPageState extends State<SellerProductInfoPage> {
                     height: 200, // Set the desired height
                     child: ClipRRect(
                       borderRadius: BorderRadius.circular(8),
-                      child: Image.asset(
-                        'assets/images/tomsottrungmuoi.png',
+                      child: Image.network(
+                        _product?.getImageUrl()?.toString() ??
+                            'https://htmlcolorcodes.com/assets/images/colors/gray-color-solid-background-1920x1080.png',
                         scale: 1,
                         fit: BoxFit.cover, // Set the desired BoxFit property
                       ),
@@ -100,7 +123,7 @@ class _SellerProductInfoPageState extends State<SellerProductInfoPage> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            'Tôm sốt trứng muối',
+                            _product?.getName()?.toString() ?? '',
                             style: TextStyle(
                               fontSize: 18,
                               fontWeight: FontWeight.bold,
@@ -126,7 +149,7 @@ class _SellerProductInfoPageState extends State<SellerProductInfoPage> {
                               borderRadius:
                                   BorderRadius.all(Radius.circular(14))),
                           child: Text(
-                            'Thức ăn',
+                            _product?.getCategoryName()?.toString() ?? '',
                             style: TextStyle(color: primaryColor),
                           ),
                         ),
@@ -145,34 +168,50 @@ class _SellerProductInfoPageState extends State<SellerProductInfoPage> {
                             style: TextStyle(fontSize: 16),
                           ),
                         ),
-                        Container(
-                          margin: EdgeInsets.only(top: 4.h, right: 8),
-                          padding:
-                              EdgeInsets.symmetric(horizontal: 10, vertical: 7),
-                          child: Text(
-                            '125.000' + 'đ',
-                            style: TextStyle(
-                              fontSize: 16,
-                              fontWeight: FontWeight.bold,
-                              decoration: TextDecoration
-                                  .lineThrough, // Add line through decoration
-                              decorationColor:
-                                  Colors.red, // Set the color of the line
-                              decorationThickness:
-                                  2, // Set the thickness of the line
-                            ),
-                          ),
-                        ),
-                        Container(
-                          margin: EdgeInsets.only(top: 4.h),
-                          child: Text(
-                            '100.000' + 'đ',
-                            style: TextStyle(
+                        if (_product?.getDiscountPrice() == null)
+                          Container(
+                            margin: EdgeInsets.only(top: 4.h, right: 8),
+                            padding: EdgeInsets.symmetric(
+                                horizontal: 10, vertical: 7),
+                            child: Text(
+                              (_product?.getOriginalPrice()?.toString() ?? '') +
+                                  ' VND',
+                              style: TextStyle(
                                 fontSize: 16,
                                 fontWeight: FontWeight.bold,
-                                color: Colors.red),
+                              ),
+                            ),
                           ),
-                        ),
+                        if (_product?.getDiscountPrice() != null)
+                          Container(
+                            margin: EdgeInsets.only(top: 4.h, right: 8),
+                            padding: EdgeInsets.symmetric(
+                                horizontal: 10, vertical: 7),
+                            child: Text(
+                              (_product?.getOriginalPrice()?.toString() ?? '') +
+                                  ' VND',
+                              style: TextStyle(
+                                fontSize: 16,
+                                fontWeight: FontWeight.bold,
+                                decoration: TextDecoration.lineThrough,
+                                decorationColor: Colors.red,
+                                decorationThickness: 2,
+                              ),
+                            ),
+                          ),
+                        if (_product?.getDiscountPrice() != null)
+                          Container(
+                            margin: EdgeInsets.only(top: 4.h),
+                            child: Text(
+                              (_product?.getDiscountPrice()?.toString() ?? '') +
+                                  ' VND',
+                              style: TextStyle(
+                                fontSize: 16,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.red,
+                              ),
+                            ),
+                          ),
                       ],
                     ),
                   ),
@@ -189,7 +228,7 @@ class _SellerProductInfoPageState extends State<SellerProductInfoPage> {
                     padding: EdgeInsets.only(
                         top: 1.h, left: 8.w, right: 8.w, bottom: 3.h),
                     child: Text(
-                      'In this example, we added the TextDecoration.lineThrough property to the TextStyle of the Text widget to create a line through the text. ',
+                      _product?.getDescription()?.toString() ?? '',
                     ),
                   ),
                 ],

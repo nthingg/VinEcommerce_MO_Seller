@@ -14,7 +14,6 @@ class Review {
   Review.fromJson(Map json)
       : Rate = json['rate'],
         Comment = json['comment'],
-        CustomerAvatarUrl = json['customer']
-            ['avatarUrl'], // Assigning value from the JSON object
+        CustomerAvatarUrl = json['customer']['avatarUrl'],
         CustomerName = json['customer']['name'];
 }

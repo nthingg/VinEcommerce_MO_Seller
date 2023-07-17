@@ -46,7 +46,9 @@ class _SellerNotificationsPageState extends State<SellerNotificationsPage>
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                            builder: (context) => SellerProductInfoPage()),
+                            builder: (context) => SellerProductInfoPage(
+                                  productId: 6,
+                                )),
                       );
                     },
                     child: Container(
@@ -169,7 +171,9 @@ class _SellerNotificationsPageState extends State<SellerNotificationsPage>
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                            builder: (context) => SellerProductInfoPage()),
+                            builder: (context) => SellerProductInfoPage(
+                                  productId: 6,
+                                )),
                       );
                     },
                     child: Container(

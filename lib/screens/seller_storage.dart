@@ -2,10 +2,12 @@ import 'package:flutter/material.dart';
 // import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sizer2/sizer2.dart';
-import 'package:vin_ecommerce/styles/app_assets.dart';
+import 'package:vin_ecommerce/data/product_repository.dart';
+import 'package:vin_ecommerce/data/store-staff_repository.dart';
+import 'package:vin_ecommerce/models/product_model.dart';
+import 'package:vin_ecommerce/models/store-staff_model.dart';
 import 'package:vin_ecommerce/styles/color.dart';
 
-import '../../models/order_model.dart';
 import 'seller_product_info.dart';
 
 class SellerStoragePage extends StatefulWidget {
@@ -17,19 +19,34 @@ class SellerStoragePage extends StatefulWidget {
 class _SellerStoragePageState extends State<SellerStoragePage>
     with TickerProviderStateMixin {
   late TabController tabController;
+  ProductRepository productRepo = new ProductRepository();
+  StoreStaffRepository staffRepo = new StoreStaffRepository();
+  List<Product> _food = [];
+  List<Product> _drink = [];
+  List<Product> _necesscity = [];
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
+    getProducts();
     tabController = TabController(length: 3, vsync: this, initialIndex: 0);
+  }
+
+  getProducts() async {
+    var storeStaff = await staffRepo.getStaff();
+    var storeId = storeStaff.getStoreId();
+    var list = await productRepo.getProductsByStoreId((storeId ?? 0));
+    setState(() {
+      _food = list.where((product) => product.getCategoryId() == 0).toList();
+      _drink = list.where((product) => product.getCategoryId() == 1).toList();
+      _necesscity =
+          list.where((product) => product.getCategoryId() == 2).toList();
+    });
   }
 
   @override
   Widget build(BuildContext context) {
-    // final storage = new FlutterSecureStorage();
-    // Future<String?> token = storage.read(key: 'token');
-    // Object token1 = token != null? token: "";
     return SafeArea(
       child: Scaffold(
           backgroundColor: Colors.white,
@@ -41,127 +58,106 @@ class _SellerStoragePageState extends State<SellerStoragePage>
                 ListView.builder(
                     physics: BouncingScrollPhysics(),
                     shrinkWrap: true,
-                    itemCount: 1,
+                    itemCount: _food.length,
                     itemBuilder: (context, index) {
+                      Product _product = _food[index];
                       return Container(
-                        margin: EdgeInsets.only(top: 16),
                         child: InkWell(
                           onTap: () {
                             Navigator.push(
                               context,
                               MaterialPageRoute(
-                                  builder: (context) =>
-                                      SellerProductInfoPage()),
+                                  builder: (context) => SellerProductInfoPage(
+                                        productId: 6,
+                                      )),
                             );
                           },
                           child: Container(
-                            height: 20.h,
+                            height: 19.h,
                             child: Column(children: [
                               Row(
                                 children: [
                                   Padding(
-                                    padding: const EdgeInsets.only(top: 4),
-                                    child: Image.asset(
-                                      'assets/images/default_store.png',
-                                      height: 140,
+                                    padding: EdgeInsets.only(
+                                        top: 2.h, right: 4.w, left: 4.w),
+                                    child: Image.network(
+                                      _product.getImageUrl()?.toString() ??
+                                          'https://htmlcolorcodes.com/assets/images/colors/gray-color-solid-background-1920x1080.png',
+                                      height: 15.h,
                                       fit: BoxFit.scaleDown,
                                       frameBuilder: (context, child, frame,
                                           wasSynchronouslyLoaded) {
                                         return Transform.scale(
                                           scale:
-                                              1.8, // Adjust the scale value to increase or decrease the image size
+                                              1, // Adjust the scale value to increase or decrease the image size
                                           child: child,
                                         );
                                       },
                                     ),
                                   ),
-                                  Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      Container(
-                                        margin: EdgeInsets.only(top: 16),
-                                        child: Row(
-                                          children: [
-                                            Text(
-                                              'Tôm sốt trứng muối',
-                                              style: TextStyle(
-                                                  fontWeight: FontWeight.bold,
-                                                  fontSize: 14),
-                                            ),
-                                          ],
-                                        ),
-                                      ),
-                                      const SizedBox(
-                                        height: 4,
-                                      ),
-                                      Container(
-                                        margin:
-                                            EdgeInsets.only(top: 8, right: 8),
-                                        padding: EdgeInsets.symmetric(
-                                            horizontal: 10, vertical: 7),
-                                        decoration: BoxDecoration(
-                                            color: pendingBackgroundColor,
-                                            shape: BoxShape.rectangle,
-                                            borderRadius: BorderRadius.all(
-                                                Radius.circular(14))),
-                                        child: Text(
-                                          'Món ăn',
-                                          style: TextStyle(color: primaryColor),
-                                        ),
-                                      ),
-                                      Padding(
-                                        padding: const EdgeInsets.symmetric(
-                                            horizontal: 0, vertical: 12),
-                                        child: Column(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                          children: [
-                                            Row(
-                                              children: [
-                                                Image.asset(
-                                                    'assets/images/star.png'),
-                                                SizedBox(
-                                                  width: 4,
-                                                ),
-                                                Text(
-                                                  '3.0',
+                                  Expanded(
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Container(
+                                          child: Row(
+                                            children: [
+                                              Expanded(
+                                                child: Text(
+                                                  _product.getName().toString(),
                                                   style: TextStyle(
-                                                      fontWeight:
-                                                          FontWeight.bold,
-                                                      color: primaryColor),
+                                                    fontWeight: FontWeight.bold,
+                                                    fontSize: 18,
+                                                  ),
+                                                  overflow:
+                                                      TextOverflow.ellipsis,
                                                 ),
-                                                SizedBox(
-                                                  width: 10,
-                                                ),
-                                                Text(
-                                                  '(' + '12' + ' Đánh giá)',
-                                                  style: TextStyle(
-                                                      color:
-                                                          secondaryTextColor),
-                                                ),
-                                              ],
-                                            ),
-                                          ],
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                  Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      Container(
-                                        margin: EdgeInsets.only(left: 6.w),
-                                        child: Text(
-                                          '125.000' + 'đ',
-                                          style: TextStyle(
-                                            fontWeight: FontWeight.bold,
-                                            fontSize: 18,
+                                              ),
+                                            ],
                                           ),
                                         ),
-                                      ),
-                                    ],
+                                        Container(
+                                          margin: EdgeInsets.only(top: 5.w),
+                                          child: Row(
+                                            children: [
+                                              Container(
+                                                margin:
+                                                    EdgeInsets.only(right: 6.w),
+                                                child: Text(
+                                                  'Giá ',
+                                                  style: TextStyle(
+                                                    color: primaryColor,
+                                                    fontWeight: FontWeight.bold,
+                                                    fontSize: 16,
+                                                  ),
+                                                ),
+                                              ),
+                                              Text(
+                                                _product.getDiscountPrice() !=
+                                                        null
+                                                    ? _product
+                                                        .getDiscountPrice()
+                                                        .toString()
+                                                    : _product
+                                                        .getOriginalPrice()
+                                                        .toString(),
+                                                style: TextStyle(
+                                                  fontSize: 16,
+                                                ),
+                                              ),
+                                              Text(
+                                                ' VND',
+                                                style: TextStyle(
+                                                  fontWeight: FontWeight.bold,
+                                                  fontSize: 16,
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                      ],
+                                    ),
                                   ),
                                 ],
                               ),
@@ -173,127 +169,106 @@ class _SellerStoragePageState extends State<SellerStoragePage>
                 ListView.builder(
                     physics: BouncingScrollPhysics(),
                     shrinkWrap: true,
-                    itemCount: 1,
+                    itemCount: _drink.length,
                     itemBuilder: (context, index) {
+                      Product _product = _drink[index];
                       return Container(
-                        margin: EdgeInsets.only(top: 16),
                         child: InkWell(
                           onTap: () {
                             Navigator.push(
                               context,
                               MaterialPageRoute(
-                                  builder: (context) =>
-                                      SellerProductInfoPage()),
+                                  builder: (context) => SellerProductInfoPage(
+                                        productId: 6,
+                                      )),
                             );
                           },
                           child: Container(
-                            height: 20.h,
+                            height: 19.h,
                             child: Column(children: [
                               Row(
                                 children: [
                                   Padding(
-                                    padding: const EdgeInsets.only(top: 4),
-                                    child: Image.asset(
-                                      'assets/images/default_store.png',
-                                      height: 140,
+                                    padding: EdgeInsets.only(
+                                        top: 2.h, right: 4.w, left: 4.w),
+                                    child: Image.network(
+                                      _product.getImageUrl()?.toString() ??
+                                          'https://htmlcolorcodes.com/assets/images/colors/gray-color-solid-background-1920x1080.png',
+                                      height: 15.h,
                                       fit: BoxFit.scaleDown,
                                       frameBuilder: (context, child, frame,
                                           wasSynchronouslyLoaded) {
                                         return Transform.scale(
                                           scale:
-                                              1.8, // Adjust the scale value to increase or decrease the image size
+                                              1, // Adjust the scale value to increase or decrease the image size
                                           child: child,
                                         );
                                       },
                                     ),
                                   ),
-                                  Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      Container(
-                                        margin: EdgeInsets.only(top: 16),
-                                        child: Row(
-                                          children: [
-                                            Text(
-                                              'Nước dừa',
-                                              style: TextStyle(
-                                                  fontWeight: FontWeight.bold,
-                                                  fontSize: 14),
-                                            ),
-                                          ],
-                                        ),
-                                      ),
-                                      const SizedBox(
-                                        height: 4,
-                                      ),
-                                      Container(
-                                        margin:
-                                            EdgeInsets.only(top: 8, right: 8),
-                                        padding: EdgeInsets.symmetric(
-                                            horizontal: 10, vertical: 7),
-                                        decoration: BoxDecoration(
-                                            color: pendingBackgroundColor,
-                                            shape: BoxShape.rectangle,
-                                            borderRadius: BorderRadius.all(
-                                                Radius.circular(14))),
-                                        child: Text(
-                                          'Thức uống',
-                                          style: TextStyle(color: primaryColor),
-                                        ),
-                                      ),
-                                      Padding(
-                                        padding: const EdgeInsets.symmetric(
-                                            horizontal: 0, vertical: 12),
-                                        child: Column(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                          children: [
-                                            Row(
-                                              children: [
-                                                Image.asset(
-                                                    'assets/images/star.png'),
-                                                SizedBox(
-                                                  width: 4,
-                                                ),
-                                                Text(
-                                                  '4.5',
+                                  Expanded(
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Container(
+                                          child: Row(
+                                            children: [
+                                              Expanded(
+                                                child: Text(
+                                                  _product.getName().toString(),
                                                   style: TextStyle(
-                                                      fontWeight:
-                                                          FontWeight.bold,
-                                                      color: primaryColor),
+                                                    fontWeight: FontWeight.bold,
+                                                    fontSize: 18,
+                                                  ),
+                                                  overflow:
+                                                      TextOverflow.ellipsis,
                                                 ),
-                                                SizedBox(
-                                                  width: 10,
-                                                ),
-                                                Text(
-                                                  '(' + '8' + ' Đánh giá)',
-                                                  style: TextStyle(
-                                                      color:
-                                                          secondaryTextColor),
-                                                ),
-                                              ],
-                                            ),
-                                          ],
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                  Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      Container(
-                                        margin: EdgeInsets.only(left: 6.w),
-                                        child: Text(
-                                          '12.000' + 'đ',
-                                          style: TextStyle(
-                                            fontWeight: FontWeight.bold,
-                                            fontSize: 18,
+                                              ),
+                                            ],
                                           ),
                                         ),
-                                      ),
-                                    ],
+                                        Container(
+                                          margin: EdgeInsets.only(top: 5.w),
+                                          child: Row(
+                                            children: [
+                                              Container(
+                                                margin:
+                                                    EdgeInsets.only(right: 6.w),
+                                                child: Text(
+                                                  'Giá ',
+                                                  style: TextStyle(
+                                                    color: primaryColor,
+                                                    fontWeight: FontWeight.bold,
+                                                    fontSize: 16,
+                                                  ),
+                                                ),
+                                              ),
+                                              Text(
+                                                _product.getDiscountPrice() !=
+                                                        null
+                                                    ? _product
+                                                        .getDiscountPrice()
+                                                        .toString()
+                                                    : _product
+                                                        .getOriginalPrice()
+                                                        .toString(),
+                                                style: TextStyle(
+                                                  fontSize: 16,
+                                                ),
+                                              ),
+                                              Text(
+                                                ' VND',
+                                                style: TextStyle(
+                                                  fontWeight: FontWeight.bold,
+                                                  fontSize: 16,
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                      ],
+                                    ),
                                   ),
                                 ],
                               ),
@@ -305,127 +280,106 @@ class _SellerStoragePageState extends State<SellerStoragePage>
                 ListView.builder(
                     physics: BouncingScrollPhysics(),
                     shrinkWrap: true,
-                    itemCount: 1,
+                    itemCount: _necesscity.length,
                     itemBuilder: (context, index) {
+                      Product _product = _necesscity[index];
                       return Container(
-                        margin: EdgeInsets.only(top: 16),
                         child: InkWell(
                           onTap: () {
                             Navigator.push(
                               context,
                               MaterialPageRoute(
-                                  builder: (context) =>
-                                      SellerProductInfoPage()),
+                                  builder: (context) => SellerProductInfoPage(
+                                        productId: 6,
+                                      )),
                             );
                           },
                           child: Container(
-                            height: 20.h,
+                            height: 19.h,
                             child: Column(children: [
                               Row(
                                 children: [
                                   Padding(
-                                    padding: const EdgeInsets.only(top: 4),
-                                    child: Image.asset(
-                                      'assets/images/default_store.png',
-                                      height: 140,
+                                    padding: EdgeInsets.only(
+                                        top: 2.h, right: 4.w, left: 4.w),
+                                    child: Image.network(
+                                      _product.getImageUrl()?.toString() ??
+                                          'https://htmlcolorcodes.com/assets/images/colors/gray-color-solid-background-1920x1080.png',
+                                      height: 15.h,
                                       fit: BoxFit.scaleDown,
                                       frameBuilder: (context, child, frame,
                                           wasSynchronouslyLoaded) {
                                         return Transform.scale(
                                           scale:
-                                              1.8, // Adjust the scale value to increase or decrease the image size
+                                              1, // Adjust the scale value to increase or decrease the image size
                                           child: child,
                                         );
                                       },
                                     ),
                                   ),
-                                  Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      Container(
-                                        margin: EdgeInsets.only(top: 16),
-                                        child: Row(
-                                          children: [
-                                            Text(
-                                              'Gạo',
-                                              style: TextStyle(
-                                                  fontWeight: FontWeight.bold,
-                                                  fontSize: 14),
-                                            ),
-                                          ],
-                                        ),
-                                      ),
-                                      const SizedBox(
-                                        height: 4,
-                                      ),
-                                      Container(
-                                        margin:
-                                            EdgeInsets.only(top: 8, right: 8),
-                                        padding: EdgeInsets.symmetric(
-                                            horizontal: 10, vertical: 7),
-                                        decoration: BoxDecoration(
-                                            color: pendingBackgroundColor,
-                                            shape: BoxShape.rectangle,
-                                            borderRadius: BorderRadius.all(
-                                                Radius.circular(14))),
-                                        child: Text(
-                                          'Nhu yếu phẩm',
-                                          style: TextStyle(color: primaryColor),
-                                        ),
-                                      ),
-                                      Padding(
-                                        padding: const EdgeInsets.symmetric(
-                                            horizontal: 0, vertical: 12),
-                                        child: Column(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                          children: [
-                                            Row(
-                                              children: [
-                                                Image.asset(
-                                                    'assets/images/star.png'),
-                                                SizedBox(
-                                                  width: 4,
-                                                ),
-                                                Text(
-                                                  '4.0',
+                                  Expanded(
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Container(
+                                          child: Row(
+                                            children: [
+                                              Expanded(
+                                                child: Text(
+                                                  _product.getName().toString(),
                                                   style: TextStyle(
-                                                      fontWeight:
-                                                          FontWeight.bold,
-                                                      color: primaryColor),
+                                                    fontWeight: FontWeight.bold,
+                                                    fontSize: 18,
+                                                  ),
+                                                  overflow:
+                                                      TextOverflow.ellipsis,
                                                 ),
-                                                SizedBox(
-                                                  width: 10,
-                                                ),
-                                                Text(
-                                                  '(' + '2' + ' Đánh giá)',
-                                                  style: TextStyle(
-                                                      color:
-                                                          secondaryTextColor),
-                                                ),
-                                              ],
-                                            ),
-                                          ],
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                  Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      Container(
-                                        margin: EdgeInsets.only(left: 6.w),
-                                        child: Text(
-                                          '50.000' + 'đ',
-                                          style: TextStyle(
-                                            fontWeight: FontWeight.bold,
-                                            fontSize: 18,
+                                              ),
+                                            ],
                                           ),
                                         ),
-                                      ),
-                                    ],
+                                        Container(
+                                          margin: EdgeInsets.only(top: 5.w),
+                                          child: Row(
+                                            children: [
+                                              Container(
+                                                margin:
+                                                    EdgeInsets.only(right: 6.w),
+                                                child: Text(
+                                                  'Giá ',
+                                                  style: TextStyle(
+                                                    color: primaryColor,
+                                                    fontWeight: FontWeight.bold,
+                                                    fontSize: 16,
+                                                  ),
+                                                ),
+                                              ),
+                                              Text(
+                                                _product.getDiscountPrice() !=
+                                                        null
+                                                    ? _product
+                                                        .getDiscountPrice()
+                                                        .toString()
+                                                    : _product
+                                                        .getOriginalPrice()
+                                                        .toString(),
+                                                style: TextStyle(
+                                                  fontSize: 16,
+                                                ),
+                                              ),
+                                              Text(
+                                                ' VND',
+                                                style: TextStyle(
+                                                  fontWeight: FontWeight.bold,
+                                                  fontSize: 16,
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                      ],
+                                    ),
                                   ),
                                 ],
                               ),
@@ -486,7 +440,7 @@ class _SellerStoragePageState extends State<SellerStoragePage>
 
   Widget _tabBar() {
     return Padding(
-      padding: EdgeInsets.symmetric(horizontal: 20),
+      padding: EdgeInsets.symmetric(horizontal: 12),
       child: Container(
         child: TabBar(
           controller: tabController,

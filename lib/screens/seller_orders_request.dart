@@ -68,7 +68,9 @@ class _SellerRequestOrdersPageState extends State<SellerRequestOrdersPage>
                           context,
                           MaterialPageRoute(
                               builder: (context) =>
-                                  SellerRequestOrderDetailsPage()),
+                                  SellerRequestOrderDetailsPage(
+                                    orderId: orderId,
+                                  )),
                         );
                       },
                       child: Container(

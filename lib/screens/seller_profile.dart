@@ -4,7 +4,9 @@ import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sizer2/sizer2.dart';
 import 'package:vin_ecommerce/screens/seller_bottom_navbar.dart';
+import 'package:vin_ecommerce/screens/seller_orders.dart';
 import 'package:vin_ecommerce/screens/seller_product_info.dart';
+import 'package:vin_ecommerce/screens/sign_in_page.dart';
 import 'package:vin_ecommerce/styles/button_style.dart';
 import 'package:vin_ecommerce/styles/color.dart';
 import 'package:vin_ecommerce/styles/square_title.dart';
@@ -158,7 +160,7 @@ class _SellerProfilePageState extends State<SellerProfilePage> {
                             Navigator.push(
                                 context,
                                 MaterialPageRoute(
-                                    builder: (_) => SellerProductInfoPage()));
+                                    builder: (_) => SellerOrdersPage()));
                           },
                           child: Container(
                             padding: EdgeInsets.symmetric(
@@ -233,7 +235,7 @@ class _SellerProfilePageState extends State<SellerProfilePage> {
                             Navigator.push(
                                 context,
                                 MaterialPageRoute(
-                                    builder: (_) => SellerProductInfoPage()));
+                                    builder: (_) => SellerOrdersPage()));
                           },
                           child: Container(
                             padding: EdgeInsets.symmetric(
@@ -369,7 +371,7 @@ class _SellerProfilePageState extends State<SellerProfilePage> {
                             Navigator.push(
                                 context,
                                 MaterialPageRoute(
-                                    builder: (_) => SellerProductInfoPage()));
+                                    builder: (_) => SignInPage()));
                           },
                           child: Container(
                             padding: EdgeInsets.symmetric(

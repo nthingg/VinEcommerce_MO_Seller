@@ -75,7 +75,9 @@ class _SellerOrdersPageState extends State<SellerOrdersPage>
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                              builder: (context) => SellerOrderDetailsPage()),
+                              builder: (context) => SellerOrderDetailsPage(
+                                    orderId: orderId,
+                                  )),
                         );
                       },
                       child: Container(
@@ -259,7 +261,9 @@ class _SellerOrdersPageState extends State<SellerOrdersPage>
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                              builder: (context) => SellerOrderDetailsPage()),
+                              builder: (context) => SellerOrderDetailsPage(
+                                    orderId: orderId,
+                                  )),
                         );
                       },
                       child: Container(
