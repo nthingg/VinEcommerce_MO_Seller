@@ -23,6 +23,7 @@ class _SellerOrderDetailsPageState extends State<SellerOrderDetailsPage>
   List<OrderDetail> _orderDetailList = [];
   OrderSpec? _orderSpec;
   String? formattedDate;
+  bool isLoading = true;
 
   @override
   void initState() {
@@ -42,6 +43,7 @@ class _SellerOrderDetailsPageState extends State<SellerOrderDetailsPage>
       DateTime dateTime = DateTime.parse(originalDate);
       formattedDate = formatDate(dateTime, 'yyyy-MM-dd HH:mm:ss');
     });
+    isLoading = false;
   }
 
   String formatDate(DateTime dateTime, String format) {
@@ -54,154 +56,175 @@ class _SellerOrderDetailsPageState extends State<SellerOrderDetailsPage>
       child: Scaffold(
         backgroundColor: Colors.white,
         appBar: _appbar(),
-        body: TabBarView(
-          controller: tabController,
-          children: [
-            ListView.builder(
-              physics: BouncingScrollPhysics(),
-              shrinkWrap: true,
-              itemCount: _orderDetailList.length,
-              itemBuilder: (context, index) {
-                OrderDetail orderDetail = _orderDetailList[index];
+        body: isLoading
+            ? Center(
+                child: Image.asset('assets/images/loading.gif'),
+              )
+            : Container(
+                child: TabBarView(
+                  controller: tabController,
+                  children: [
+                    ListView.builder(
+                      physics: BouncingScrollPhysics(),
+                      shrinkWrap: true,
+                      itemCount: _orderDetailList.length,
+                      itemBuilder: (context, index) {
+                        OrderDetail orderDetail = _orderDetailList[index];
 
-                return Container(
-                  margin: EdgeInsets.only(top: 4),
-                  child: InkWell(
-                    onTap: () {
-                      Navigator.of(context).pushNamed(
-                        '/productInfo',
-                        arguments: {
-                          'productId': orderDetail.getProductId(),
-                          'orderId': _orderSpec!.getId(),
-                          'fatherRoute': '/orderDetails',
-                        },
-                      );
-                    },
-                    child: Container(
-                      height: 17.5.h,
-                      child: Column(
-                        children: [
-                          Row(
-                            children: [
-                              Padding(
-                                padding: const EdgeInsets.only(top: 4),
-                                child: Image.network(
-                                  orderDetail
-                                      .getProductImageUrl()
-                                      .toString(), // Replace with your image URL
-                                  height: 30.w,
-                                  fit: BoxFit.scaleDown,
-                                  frameBuilder: (context, child, frame,
-                                      wasSynchronouslyLoaded) {
-                                    return Transform.scale(
-                                      scale:
-                                          0.8, // Adjust the scale value to increase or decrease the image size
-                                      child: child,
-                                    );
-                                  },
-                                ),
-                              ),
-                              Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
+                        return Container(
+                          margin: EdgeInsets.only(top: 4),
+                          child: InkWell(
+                            onTap: () {
+                              Navigator.of(context).pushNamed(
+                                '/productInfo',
+                                arguments: {
+                                  'productId': orderDetail.getProductId(),
+                                  'orderId': _orderSpec!.getId(),
+                                  'fatherRoute': '/orderDetails',
+                                },
+                              );
+                            },
+                            child: Container(
+                              height: 17.5.h,
+                              child: Column(
                                 children: [
-                                  Container(
-                                    margin: EdgeInsets.only(right: 8),
-                                    padding: EdgeInsets.only(bottom: 0),
-                                    child: Text(
-                                      '#' +
+                                  Row(
+                                    children: [
+                                      Padding(
+                                        padding: const EdgeInsets.only(top: 4),
+                                        child: Image.network(
                                           orderDetail
-                                              .getCategoryName()
-                                              .toString(),
-                                      style: TextStyle(color: primaryColor),
-                                    ),
-                                  ),
-                                  Container(
-                                    width: 66.w,
-                                    margin: EdgeInsets.only(top: 4, bottom: 8),
-                                    child: Row(
-                                      children: [
-                                        Expanded(
-                                          child: Text(
-                                            orderDetail
-                                                .getProductName()
-                                                .toString(),
-                                            overflow: TextOverflow.ellipsis,
-                                            style: TextStyle(
-                                                fontSize: 18,
-                                                fontWeight: FontWeight.bold),
-                                          ),
+                                              .getProductImageUrl()
+                                              .toString(), // Replace with your image URL
+                                          height: 30.w,
+                                          fit: BoxFit.scaleDown,
+                                          frameBuilder: (context, child, frame,
+                                              wasSynchronouslyLoaded) {
+                                            return Transform.scale(
+                                              scale:
+                                                  0.8, // Adjust the scale value to increase or decrease the image size
+                                              child: child,
+                                            );
+                                          },
                                         ),
-                                      ],
-                                    ),
-                                  ),
-                                  Container(
-                                    margin: EdgeInsets.only(top: 4, bottom: 8),
-                                    child: Row(
-                                      children: [
-                                        Container(
-                                          margin: EdgeInsets.only(right: 9.w),
-                                          child: Text(
-                                            'Số lượng ',
-                                            style: TextStyle(
-                                              color: primaryColor,
-                                              fontWeight: FontWeight.bold,
-                                              fontSize: 16,
+                                      ),
+                                      Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          Container(
+                                            margin: EdgeInsets.only(right: 8),
+                                            padding: EdgeInsets.only(bottom: 0),
+                                            child: Text(
+                                              '#' +
+                                                  orderDetail
+                                                      .getCategoryName()
+                                                      .toString(),
+                                              style: TextStyle(
+                                                  color: primaryColor),
                                             ),
                                           ),
-                                        ),
-                                        Text(
-                                          orderDetail.getQuantity().toString(),
-                                          style: TextStyle(
-                                              fontWeight: FontWeight.bold),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                  Container(
-                                    margin: EdgeInsets.only(top: 1.w),
-                                    child: Row(
-                                      children: [
-                                        Container(
-                                          margin: EdgeInsets.only(right: 6.w),
-                                          child: Text(
-                                            'Thành tiền ',
-                                            style: TextStyle(
-                                              color: primaryColor,
-                                              fontWeight: FontWeight.bold,
-                                              fontSize: 16,
+                                          Container(
+                                            width: 66.w,
+                                            margin: EdgeInsets.only(
+                                                top: 4, bottom: 8),
+                                            child: Row(
+                                              children: [
+                                                Expanded(
+                                                  child: Text(
+                                                    orderDetail
+                                                        .getProductName()
+                                                        .toString(),
+                                                    overflow:
+                                                        TextOverflow.ellipsis,
+                                                    style: TextStyle(
+                                                        fontSize: 18,
+                                                        fontWeight:
+                                                            FontWeight.bold),
+                                                  ),
+                                                ),
+                                              ],
                                             ),
                                           ),
-                                        ),
-                                        Text(
-                                          orderDetail.getPrice().toString(),
-                                          style: TextStyle(
-                                            fontSize: 16,
+                                          Container(
+                                            margin: EdgeInsets.only(
+                                                top: 4, bottom: 8),
+                                            child: Row(
+                                              children: [
+                                                Container(
+                                                  margin: EdgeInsets.only(
+                                                      right: 9.w),
+                                                  child: Text(
+                                                    'Số lượng ',
+                                                    style: TextStyle(
+                                                      color: primaryColor,
+                                                      fontWeight:
+                                                          FontWeight.bold,
+                                                      fontSize: 16,
+                                                    ),
+                                                  ),
+                                                ),
+                                                Text(
+                                                  orderDetail
+                                                      .getQuantity()
+                                                      .toString(),
+                                                  style: TextStyle(
+                                                      fontWeight:
+                                                          FontWeight.bold),
+                                                ),
+                                              ],
+                                            ),
                                           ),
-                                        ),
-                                        Text(
-                                          ' VND',
-                                          style: TextStyle(
-                                            fontWeight: FontWeight.bold,
-                                            fontSize: 16,
+                                          Container(
+                                            margin: EdgeInsets.only(top: 1.w),
+                                            child: Row(
+                                              children: [
+                                                Container(
+                                                  margin: EdgeInsets.only(
+                                                      right: 6.w),
+                                                  child: Text(
+                                                    'Thành tiền ',
+                                                    style: TextStyle(
+                                                      color: primaryColor,
+                                                      fontWeight:
+                                                          FontWeight.bold,
+                                                      fontSize: 16,
+                                                    ),
+                                                  ),
+                                                ),
+                                                Text(
+                                                  orderDetail
+                                                      .getPrice()
+                                                      .toString(),
+                                                  style: TextStyle(
+                                                    fontSize: 16,
+                                                  ),
+                                                ),
+                                                Text(
+                                                  ' VND',
+                                                  style: TextStyle(
+                                                    fontWeight: FontWeight.bold,
+                                                    fontSize: 16,
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
                                           ),
-                                        ),
-                                      ],
-                                    ),
+                                        ],
+                                      ),
+                                    ],
                                   ),
                                 ],
                               ),
-                            ],
+                            ),
                           ),
-                        ],
-                      ),
+                        );
+                      },
                     ),
-                  ),
-                );
-              },
-            ),
-          ],
-          // child: Text(token1.toString()),
-        ),
+                  ],
+                  // child: Text(token1.toString()),
+                ),
+              ),
       ),
     );
   }

@@ -20,6 +20,7 @@ class _SellerStoragePageState extends State<SellerStoragePage>
   List<Product> _food = [];
   List<Product> _drink = [];
   List<Product> _necesscity = [];
+  bool isLoading = true;
 
   @override
   void initState() {
@@ -39,6 +40,7 @@ class _SellerStoragePageState extends State<SellerStoragePage>
       _necesscity =
           list.where((product) => product.getCategoryId() == 2).toList();
     });
+    isLoading = false;
   }
 
   @override
@@ -47,245 +49,271 @@ class _SellerStoragePageState extends State<SellerStoragePage>
       child: Scaffold(
         backgroundColor: Colors.white,
         appBar: _appbar(),
-        body: Container(
-          child: TabBarView(
-            controller: tabController,
-            children: [
-              ListView.builder(
-                  physics: BouncingScrollPhysics(),
-                  shrinkWrap: true,
-                  itemCount: _food.length,
-                  itemBuilder: (context, index) {
-                    Product _product = _food[index];
-                    return Container(
-                      child: InkWell(
-                        onTap: () {
-                          Navigator.of(context).pushNamed(
-                            '/productInfo',
-                            arguments: {
-                              'productId': _product.getId(),
-                              'orderId': 0,
-                              'fatherRoute': '/storage',
-                            },
-                          );
-                        },
-                        child: Container(
-                          height: 19.h,
-                          child: Column(children: [
-                            Row(
-                              children: [
-                                Padding(
-                                  padding: EdgeInsets.only(
-                                      top: 2.h, right: 4.w, left: 4.w),
-                                  child: Image.network(
-                                    _product.getImageUrl()?.toString() ??
-                                        'https://htmlcolorcodes.com/assets/images/colors/gray-color-solid-background-1920x1080.png',
-                                    height: 15.h,
-                                    fit: BoxFit.scaleDown,
-                                    frameBuilder: (context, child, frame,
-                                        wasSynchronouslyLoaded) {
-                                      return Transform.scale(
-                                        scale:
-                                            1, // Adjust the scale value to increase or decrease the image size
-                                        child: child,
-                                      );
-                                    },
-                                  ),
-                                ),
-                                Expanded(
-                                  child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
+        body: isLoading
+            ? Center(
+                child: Image.asset('assets/images/loading.gif'),
+              )
+            : Container(
+                child: TabBarView(
+                  controller: tabController,
+                  children: [
+                    ListView.builder(
+                        physics: BouncingScrollPhysics(),
+                        shrinkWrap: true,
+                        itemCount: _food.length,
+                        itemBuilder: (context, index) {
+                          Product _product = _food[index];
+                          return Container(
+                            child: InkWell(
+                              onTap: () {
+                                Navigator.of(context).pushNamed(
+                                  '/productInfo',
+                                  arguments: {
+                                    'productId': _product.getId(),
+                                    'orderId': 0,
+                                    'fatherRoute': '/storage',
+                                  },
+                                );
+                              },
+                              child: Container(
+                                height: 19.h,
+                                child: Column(children: [
+                                  Row(
                                     children: [
-                                      Container(
-                                        child: Row(
-                                          children: [
-                                            Expanded(
-                                              child: Text(
-                                                _product.getName().toString(),
-                                                style: TextStyle(
-                                                  fontWeight: FontWeight.bold,
-                                                  fontSize: 18,
-                                                ),
-                                                overflow: TextOverflow.ellipsis,
-                                              ),
-                                            ),
-                                          ],
+                                      Padding(
+                                        padding: EdgeInsets.only(
+                                            top: 2.h, right: 4.w, left: 4.w),
+                                        child: Image.network(
+                                          _product.getImageUrl()?.toString() ??
+                                              'https://htmlcolorcodes.com/assets/images/colors/gray-color-solid-background-1920x1080.png',
+                                          height: 15.h,
+                                          fit: BoxFit.scaleDown,
+                                          frameBuilder: (context, child, frame,
+                                              wasSynchronouslyLoaded) {
+                                            return Transform.scale(
+                                              scale:
+                                                  1, // Adjust the scale value to increase or decrease the image size
+                                              child: child,
+                                            );
+                                          },
                                         ),
                                       ),
-                                      Container(
-                                        margin: EdgeInsets.only(top: 5.w),
-                                        child: Row(
+                                      Expanded(
+                                        child: Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
                                           children: [
                                             Container(
-                                              margin:
-                                                  EdgeInsets.only(right: 6.w),
-                                              child: Text(
-                                                'Giá ',
-                                                style: TextStyle(
-                                                  color: primaryColor,
-                                                  fontWeight: FontWeight.bold,
-                                                  fontSize: 16,
-                                                ),
+                                              child: Row(
+                                                children: [
+                                                  Expanded(
+                                                    child: Text(
+                                                      _product
+                                                          .getName()
+                                                          .toString(),
+                                                      style: TextStyle(
+                                                        fontWeight:
+                                                            FontWeight.bold,
+                                                        fontSize: 18,
+                                                      ),
+                                                      overflow:
+                                                          TextOverflow.ellipsis,
+                                                    ),
+                                                  ),
+                                                ],
                                               ),
                                             ),
-                                            Text(
-                                              _product.getDiscountPrice() !=
-                                                      null
-                                                  ? _product
-                                                      .getDiscountPrice()
-                                                      .toString()
-                                                  : _product
-                                                      .getOriginalPrice()
-                                                      .toString(),
-                                              style: TextStyle(
-                                                fontSize: 16,
+                                            Container(
+                                              margin: EdgeInsets.only(top: 5.w),
+                                              child: Row(
+                                                children: [
+                                                  Container(
+                                                    margin: EdgeInsets.only(
+                                                        right: 6.w),
+                                                    child: Text(
+                                                      'Giá ',
+                                                      style: TextStyle(
+                                                        color: primaryColor,
+                                                        fontWeight:
+                                                            FontWeight.bold,
+                                                        fontSize: 16,
+                                                      ),
+                                                    ),
+                                                  ),
+                                                  Text(
+                                                    _product.getDiscountPrice() !=
+                                                            null
+                                                        ? _product
+                                                            .getDiscountPrice()
+                                                            .toString()
+                                                        : _product
+                                                            .getOriginalPrice()
+                                                            .toString(),
+                                                    style: TextStyle(
+                                                      fontSize: 16,
+                                                    ),
+                                                  ),
+                                                  Text(
+                                                    ' VND',
+                                                    style: TextStyle(
+                                                      fontWeight:
+                                                          FontWeight.bold,
+                                                      fontSize: 16,
+                                                    ),
+                                                  ),
+                                                ],
                                               ),
                                             ),
-                                            Text(
-                                              ' VND',
-                                              style: TextStyle(
-                                                fontWeight: FontWeight.bold,
-                                                fontSize: 16,
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-                                      ),
-                                      if (_product?.getIsOutOfStock() ?? false)
-                                        Container(
-                                          child: Row(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.spaceBetween,
-                                            children: [
+                                            if (_product?.getIsOutOfStock() ??
+                                                false)
                                               Container(
-                                                margin: EdgeInsets.only(
-                                                    top: 8, right: 8),
-                                                padding: EdgeInsets.symmetric(
-                                                    horizontal: 10,
-                                                    vertical: 7),
-                                                decoration: BoxDecoration(
-                                                    color: Colors.grey[300],
-                                                    shape: BoxShape.rectangle,
-                                                    borderRadius:
-                                                        BorderRadius.all(
-                                                            Radius.circular(
-                                                                14))),
-                                                child: Text(
-                                                  'Hết hàng',
-                                                  style: TextStyle(
-                                                      color: Colors.black),
+                                                child: Row(
+                                                  mainAxisAlignment:
+                                                      MainAxisAlignment
+                                                          .spaceBetween,
+                                                  children: [
+                                                    Container(
+                                                      margin: EdgeInsets.only(
+                                                          top: 8, right: 8),
+                                                      padding:
+                                                          EdgeInsets.symmetric(
+                                                              horizontal: 10,
+                                                              vertical: 7),
+                                                      decoration: BoxDecoration(
+                                                          color:
+                                                              Colors.grey[300],
+                                                          shape: BoxShape
+                                                              .rectangle,
+                                                          borderRadius:
+                                                              BorderRadius.all(
+                                                                  Radius
+                                                                      .circular(
+                                                                          14))),
+                                                      child: Text(
+                                                        'Hết hàng',
+                                                        style: TextStyle(
+                                                            color:
+                                                                Colors.black),
+                                                      ),
+                                                    ),
+                                                  ],
                                                 ),
                                               ),
-                                            ],
-                                          ),
-                                        ),
-                                    ],
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ]),
-                        ),
-                      ),
-                    );
-                  }),
-              ListView.builder(
-                  physics: BouncingScrollPhysics(),
-                  shrinkWrap: true,
-                  itemCount: _drink.length,
-                  itemBuilder: (context, index) {
-                    Product _product = _drink[index];
-                    return Container(
-                      child: InkWell(
-                        onTap: () {
-                          Navigator.of(context).pushNamed(
-                            '/productInfo',
-                            arguments: {
-                              'productId': _product.getId(),
-                              'orderId': 0,
-                              'fatherRoute': '/storage',
-                            },
-                          );
-                        },
-                        child: Container(
-                          height: 19.h,
-                          child: Column(children: [
-                            Row(
-                              children: [
-                                Padding(
-                                  padding: EdgeInsets.only(
-                                      top: 2.h, right: 4.w, left: 4.w),
-                                  child: Image.network(
-                                    _product.getImageUrl()?.toString() ??
-                                        'https://htmlcolorcodes.com/assets/images/colors/gray-color-solid-background-1920x1080.png',
-                                    height: 15.h,
-                                    fit: BoxFit.scaleDown,
-                                    frameBuilder: (context, child, frame,
-                                        wasSynchronouslyLoaded) {
-                                      return Transform.scale(
-                                        scale:
-                                            1, // Adjust the scale value to increase or decrease the image size
-                                        child: child,
-                                      );
-                                    },
-                                  ),
-                                ),
-                                Expanded(
-                                  child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      Container(
-                                        child: Row(
-                                          children: [
-                                            Expanded(
-                                              child: Text(
-                                                _product.getName().toString(),
-                                                style: TextStyle(
-                                                  fontWeight: FontWeight.bold,
-                                                  fontSize: 18,
-                                                ),
-                                                overflow: TextOverflow.ellipsis,
-                                              ),
-                                            ),
                                           ],
                                         ),
                                       ),
-                                      Container(
-                                        margin: EdgeInsets.only(top: 5.w),
-                                        child: Row(
+                                    ],
+                                  ),
+                                ]),
+                              ),
+                            ),
+                          );
+                        }),
+                    ListView.builder(
+                        physics: BouncingScrollPhysics(),
+                        shrinkWrap: true,
+                        itemCount: _drink.length,
+                        itemBuilder: (context, index) {
+                          Product _product = _drink[index];
+                          return Container(
+                            child: InkWell(
+                              onTap: () {
+                                Navigator.of(context).pushNamed(
+                                  '/productInfo',
+                                  arguments: {
+                                    'productId': _product.getId(),
+                                    'orderId': 0,
+                                    'fatherRoute': '/storage',
+                                  },
+                                );
+                              },
+                              child: Container(
+                                height: 19.h,
+                                child: Column(children: [
+                                  Row(
+                                    children: [
+                                      Padding(
+                                        padding: EdgeInsets.only(
+                                            top: 2.h, right: 4.w, left: 4.w),
+                                        child: Image.network(
+                                          _product.getImageUrl()?.toString() ??
+                                              'https://htmlcolorcodes.com/assets/images/colors/gray-color-solid-background-1920x1080.png',
+                                          height: 15.h,
+                                          fit: BoxFit.scaleDown,
+                                          frameBuilder: (context, child, frame,
+                                              wasSynchronouslyLoaded) {
+                                            return Transform.scale(
+                                              scale:
+                                                  1, // Adjust the scale value to increase or decrease the image size
+                                              child: child,
+                                            );
+                                          },
+                                        ),
+                                      ),
+                                      Expanded(
+                                        child: Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
                                           children: [
                                             Container(
-                                              margin:
-                                                  EdgeInsets.only(right: 6.w),
-                                              child: Text(
-                                                'Giá ',
-                                                style: TextStyle(
-                                                  color: primaryColor,
-                                                  fontWeight: FontWeight.bold,
-                                                  fontSize: 16,
-                                                ),
+                                              child: Row(
+                                                children: [
+                                                  Expanded(
+                                                    child: Text(
+                                                      _product
+                                                          .getName()
+                                                          .toString(),
+                                                      style: TextStyle(
+                                                        fontWeight:
+                                                            FontWeight.bold,
+                                                        fontSize: 18,
+                                                      ),
+                                                      overflow:
+                                                          TextOverflow.ellipsis,
+                                                    ),
+                                                  ),
+                                                ],
                                               ),
                                             ),
-                                            Text(
-                                              _product.getDiscountPrice() !=
-                                                      null
-                                                  ? _product
-                                                      .getDiscountPrice()
-                                                      .toString()
-                                                  : _product
-                                                      .getOriginalPrice()
-                                                      .toString(),
-                                              style: TextStyle(
-                                                fontSize: 16,
-                                              ),
-                                            ),
-                                            Text(
-                                              ' VND',
-                                              style: TextStyle(
-                                                fontWeight: FontWeight.bold,
-                                                fontSize: 16,
+                                            Container(
+                                              margin: EdgeInsets.only(top: 5.w),
+                                              child: Row(
+                                                children: [
+                                                  Container(
+                                                    margin: EdgeInsets.only(
+                                                        right: 6.w),
+                                                    child: Text(
+                                                      'Giá ',
+                                                      style: TextStyle(
+                                                        color: primaryColor,
+                                                        fontWeight:
+                                                            FontWeight.bold,
+                                                        fontSize: 16,
+                                                      ),
+                                                    ),
+                                                  ),
+                                                  Text(
+                                                    _product.getDiscountPrice() !=
+                                                            null
+                                                        ? _product
+                                                            .getDiscountPrice()
+                                                            .toString()
+                                                        : _product
+                                                            .getOriginalPrice()
+                                                            .toString(),
+                                                    style: TextStyle(
+                                                      fontSize: 16,
+                                                    ),
+                                                  ),
+                                                  Text(
+                                                    ' VND',
+                                                    style: TextStyle(
+                                                      fontWeight:
+                                                          FontWeight.bold,
+                                                      fontSize: 16,
+                                                    ),
+                                                  ),
+                                                ],
                                               ),
                                             ),
                                           ],
@@ -293,110 +321,116 @@ class _SellerStoragePageState extends State<SellerStoragePage>
                                       ),
                                     ],
                                   ),
-                                ),
-                              ],
+                                ]),
+                              ),
                             ),
-                          ]),
-                        ),
-                      ),
-                    );
-                  }),
-              ListView.builder(
-                  physics: BouncingScrollPhysics(),
-                  shrinkWrap: true,
-                  itemCount: _necesscity.length,
-                  itemBuilder: (context, index) {
-                    Product _product = _necesscity[index];
-                    return Container(
-                      child: InkWell(
-                        onTap: () {
-                          Navigator.of(context).pushNamed(
-                            '/productInfo',
-                            arguments: {
-                              'productId': _product.getId(),
-                              'orderId': 0,
-                              'fatherRoute': '/storage',
-                            },
                           );
-                        },
-                        child: Container(
-                          height: 19.h,
-                          child: Column(children: [
-                            Row(
-                              children: [
-                                Padding(
-                                  padding: EdgeInsets.only(
-                                      top: 2.h, right: 4.w, left: 4.w),
-                                  child: Image.network(
-                                    _product.getImageUrl()?.toString() ??
-                                        'https://htmlcolorcodes.com/assets/images/colors/gray-color-solid-background-1920x1080.png',
-                                    height: 15.h,
-                                    fit: BoxFit.scaleDown,
-                                    frameBuilder: (context, child, frame,
-                                        wasSynchronouslyLoaded) {
-                                      return Transform.scale(
-                                        scale:
-                                            1, // Adjust the scale value to increase or decrease the image size
-                                        child: child,
-                                      );
-                                    },
-                                  ),
-                                ),
-                                Expanded(
-                                  child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
+                        }),
+                    ListView.builder(
+                        physics: BouncingScrollPhysics(),
+                        shrinkWrap: true,
+                        itemCount: _necesscity.length,
+                        itemBuilder: (context, index) {
+                          Product _product = _necesscity[index];
+                          return Container(
+                            child: InkWell(
+                              onTap: () {
+                                Navigator.of(context).pushNamed(
+                                  '/productInfo',
+                                  arguments: {
+                                    'productId': _product.getId(),
+                                    'orderId': 0,
+                                    'fatherRoute': '/storage',
+                                  },
+                                );
+                              },
+                              child: Container(
+                                height: 19.h,
+                                child: Column(children: [
+                                  Row(
                                     children: [
-                                      Container(
-                                        child: Row(
-                                          children: [
-                                            Expanded(
-                                              child: Text(
-                                                _product.getName().toString(),
-                                                style: TextStyle(
-                                                  fontWeight: FontWeight.bold,
-                                                  fontSize: 18,
-                                                ),
-                                                overflow: TextOverflow.ellipsis,
-                                              ),
-                                            ),
-                                          ],
+                                      Padding(
+                                        padding: EdgeInsets.only(
+                                            top: 2.h, right: 4.w, left: 4.w),
+                                        child: Image.network(
+                                          _product.getImageUrl()?.toString() ??
+                                              'https://htmlcolorcodes.com/assets/images/colors/gray-color-solid-background-1920x1080.png',
+                                          height: 15.h,
+                                          fit: BoxFit.scaleDown,
+                                          frameBuilder: (context, child, frame,
+                                              wasSynchronouslyLoaded) {
+                                            return Transform.scale(
+                                              scale:
+                                                  1, // Adjust the scale value to increase or decrease the image size
+                                              child: child,
+                                            );
+                                          },
                                         ),
                                       ),
-                                      Container(
-                                        margin: EdgeInsets.only(top: 5.w),
-                                        child: Row(
+                                      Expanded(
+                                        child: Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
                                           children: [
                                             Container(
-                                              margin:
-                                                  EdgeInsets.only(right: 6.w),
-                                              child: Text(
-                                                'Giá ',
-                                                style: TextStyle(
-                                                  color: primaryColor,
-                                                  fontWeight: FontWeight.bold,
-                                                  fontSize: 16,
-                                                ),
+                                              child: Row(
+                                                children: [
+                                                  Expanded(
+                                                    child: Text(
+                                                      _product
+                                                          .getName()
+                                                          .toString(),
+                                                      style: TextStyle(
+                                                        fontWeight:
+                                                            FontWeight.bold,
+                                                        fontSize: 18,
+                                                      ),
+                                                      overflow:
+                                                          TextOverflow.ellipsis,
+                                                    ),
+                                                  ),
+                                                ],
                                               ),
                                             ),
-                                            Text(
-                                              _product.getDiscountPrice() !=
-                                                      null
-                                                  ? _product
-                                                      .getDiscountPrice()
-                                                      .toString()
-                                                  : _product
-                                                      .getOriginalPrice()
-                                                      .toString(),
-                                              style: TextStyle(
-                                                fontSize: 16,
-                                              ),
-                                            ),
-                                            Text(
-                                              ' VND',
-                                              style: TextStyle(
-                                                fontWeight: FontWeight.bold,
-                                                fontSize: 16,
+                                            Container(
+                                              margin: EdgeInsets.only(top: 5.w),
+                                              child: Row(
+                                                children: [
+                                                  Container(
+                                                    margin: EdgeInsets.only(
+                                                        right: 6.w),
+                                                    child: Text(
+                                                      'Giá ',
+                                                      style: TextStyle(
+                                                        color: primaryColor,
+                                                        fontWeight:
+                                                            FontWeight.bold,
+                                                        fontSize: 16,
+                                                      ),
+                                                    ),
+                                                  ),
+                                                  Text(
+                                                    _product.getDiscountPrice() !=
+                                                            null
+                                                        ? _product
+                                                            .getDiscountPrice()
+                                                            .toString()
+                                                        : _product
+                                                            .getOriginalPrice()
+                                                            .toString(),
+                                                    style: TextStyle(
+                                                      fontSize: 16,
+                                                    ),
+                                                  ),
+                                                  Text(
+                                                    ' VND',
+                                                    style: TextStyle(
+                                                      fontWeight:
+                                                          FontWeight.bold,
+                                                      fontSize: 16,
+                                                    ),
+                                                  ),
+                                                ],
                                               ),
                                             ),
                                           ],
@@ -404,18 +438,15 @@ class _SellerStoragePageState extends State<SellerStoragePage>
                                       ),
                                     ],
                                   ),
-                                ),
-                              ],
+                                ]),
+                              ),
                             ),
-                          ]),
-                        ),
-                      ),
-                    );
-                  }),
-            ],
-            // child: Text(token1.toString()),
-          ),
-        ),
+                          );
+                        }),
+                  ],
+                  // child: Text(token1.toString()),
+                ),
+              ),
         floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
         floatingActionButton: FloatingActionButton(
           onPressed: () {
