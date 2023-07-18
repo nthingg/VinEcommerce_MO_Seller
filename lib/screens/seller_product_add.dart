@@ -1,15 +1,19 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:file_picker/file_picker.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:image_picker/image_picker.dart';
 import 'dart:io';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sizer2/sizer2.dart';
+import 'package:vin_ecommerce/data/product_repository.dart';
+import 'package:vin_ecommerce/screens/seller_bottom_navbar.dart';
 
 import 'package:vin_ecommerce/styles/button_style.dart';
 import 'package:vin_ecommerce/styles/color.dart';
 
 import 'package:http/http.dart' as http;
+import 'package:vin_ecommerce/util/util.dart';
 
 class SellerAddProductPage extends StatefulWidget {
   const SellerAddProductPage({super.key});
@@ -19,7 +23,9 @@ class SellerAddProductPage extends StatefulWidget {
 }
 
 class _SellerAddProductPageState extends State<SellerAddProductPage> {
-  XFile? myImage = null;
+  ProductRepository productRepo = new ProductRepository();
+
+  XFile? myImage;
   String? imageUrl;
 
   List<String> categories = ['Đồ ăn', 'Thức uống', 'Nhu yếu phẩm'];
@@ -30,6 +36,58 @@ class _SellerAddProductPageState extends State<SellerAddProductPage> {
   TextEditingController nameController = TextEditingController();
   TextEditingController originalPriceController = TextEditingController();
   TextEditingController descriptionController = TextEditingController();
+
+  bool checkAndShowToast(
+      TextEditingController name,
+      TextEditingController price,
+      TextEditingController description,
+      XFile? image) {
+    if (name.text.isEmpty) {
+      Fluttertoast.showToast(
+        msg: 'Vui lòng điền đầy đủ tên sản phẩm!',
+        toastLength: Toast.LENGTH_SHORT,
+        gravity: ToastGravity.BOTTOM,
+      );
+      return false;
+    } else if (image == null) {
+      Fluttertoast.showToast(
+        msg: 'Vui lòng chọn hình hảnh!',
+        toastLength: Toast.LENGTH_SHORT,
+        gravity: ToastGravity.BOTTOM,
+      );
+      return false;
+    } else if (price.text.isEmpty) {
+      Fluttertoast.showToast(
+        msg: 'Vui lòng điền đầy đủ giá tiền gốc!',
+        toastLength: Toast.LENGTH_SHORT,
+        gravity: ToastGravity.BOTTOM,
+      );
+      return false;
+    } else if (!price.text.isEmpty) {
+      int priceValue;
+
+      try {
+        priceValue = int.parse(price.text.toString());
+      } catch (e) {
+        Fluttertoast.showToast(
+          msg: 'Trường giá gốc là chữ số!',
+          toastLength: Toast.LENGTH_SHORT,
+          gravity: ToastGravity.BOTTOM,
+        );
+        return false;
+      }
+
+      if (priceValue == 0) {
+        Fluttertoast.showToast(
+          msg: 'Trường giá gốc yêu cầu số tự nhiên lớn 0!',
+          toastLength: Toast.LENGTH_SHORT,
+          gravity: ToastGravity.BOTTOM,
+        );
+        return false;
+      }
+    }
+    return true;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -300,12 +358,37 @@ class _SellerAddProductPageState extends State<SellerAddProductPage> {
                           child: ElevatedButton(
                             style: elevatedButtonStyle.copyWith(),
                             child: Text('THÊM'),
-                            onPressed: () {
-                              // Navigator.pushAndRemoveUntil(
-                              //     context,
-                              //     MaterialPageRoute(
-                              //         builder: (_) => VerificationPage()),
-                              //     (route) => false);
+                            onPressed: () async {
+                              if (!checkAndShowToast(
+                                  nameController,
+                                  originalPriceController,
+                                  descriptionController,
+                                  myImage)) {
+                                return;
+                              }
+                              if (descriptionController.text.isEmpty) {
+                                Fluttertoast.showToast(
+                                  msg: 'Vui lòng điền đầy đủ mô tả sản phẩm!',
+                                  toastLength: Toast.LENGTH_SHORT,
+                                  gravity: ToastGravity.BOTTOM,
+                                );
+                                return;
+                              }
+                              if (myImage != null) {
+                                imageUrl = await uploadImageToFireBase(myImage);
+                              }
+                              bool check = await productRepo.createNewProduct(
+                                  selectedCategory,
+                                  nameController.text.toString(),
+                                  imageUrl.toString(),
+                                  descriptionController.text.toString(),
+                                  originalPriceController.text.toString());
+                              Navigator.pushAndRemoveUntil(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (_) =>
+                                          BottomNavBar(initialIndex: 1)),
+                                  (route) => false);
                             },
                           ),
                         ),

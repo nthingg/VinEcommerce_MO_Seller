@@ -37,3 +37,14 @@ Future<String> uploadImageToFireBase(XFile? myImage) async {
 
   return imageUrl;
 }
+
+List<String> categories = ['Đồ ăn', 'Thức uống', 'Nhu yếu phẩm'];
+
+int getIndexByCategory(String category) {
+  for (int i = 0; i < categories.length; i++) {
+    if (categories[i] == category) {
+      return i;
+    }
+  }
+  return -1; // Return -1 if the category is not found
+}
