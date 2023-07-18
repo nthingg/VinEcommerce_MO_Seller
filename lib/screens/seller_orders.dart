@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sizer2/sizer2.dart';
 import 'package:vin_ecommerce/data/order_repository.dart';
-import 'package:vin_ecommerce/main.dart';
+import 'package:vin_ecommerce/screens/seller_bottom_navbar.dart';
 import 'package:vin_ecommerce/screens/seller_order_details.dart';
 import 'package:vin_ecommerce/styles/color.dart';
 
@@ -468,12 +467,6 @@ class _SellerOrdersPageState extends State<SellerOrdersPage>
     );
   }
 
-  void getValidation() async {
-    final SharedPreferences pref = await SharedPreferences.getInstance();
-    var token = pref.getString('token');
-    print("token ne`" + token!);
-  }
-
   PreferredSize _appbar() {
     return PreferredSize(
         child: Container(
@@ -499,7 +492,11 @@ class _SellerOrdersPageState extends State<SellerOrdersPage>
               onPressed: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => MainApp()),
+                  MaterialPageRoute(
+                    builder: (context) => BottomNavBar(
+                      initialIndex: 0,
+                    ),
+                  ),
                 );
               },
               child: Image.asset(

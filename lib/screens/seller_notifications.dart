@@ -3,8 +3,6 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sizer2/sizer2.dart';
 import 'package:vin_ecommerce/styles/color.dart';
 
-import 'seller_product_info.dart';
-
 class SellerNotificationsPage extends StatefulWidget {
   const SellerNotificationsPage({super.key});
   @override

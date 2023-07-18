@@ -2,22 +2,7 @@
 import 'package:flutter/material.dart';
 import 'package:sizer2/sizer2.dart';
 import 'package:vin_ecommerce/routes/route_generator.dart';
-
-import 'package:vin_ecommerce/screens/sign_in_page.dart';
-import 'package:vin_ecommerce/screens/seller_orders.dart';
-import 'package:vin_ecommerce/screens/seller_order_details_request.dart';
-import 'package:vin_ecommerce/screens/seller_order_details.dart';
-import 'package:vin_ecommerce/screens/seller_orders_request.dart';
-import 'package:vin_ecommerce/screens/seller_notifications.dart';
-import 'package:vin_ecommerce/screens/seller_storage.dart';
-import 'package:vin_ecommerce/screens/seller_reviews.dart';
-import 'package:vin_ecommerce/screens/seller_profile.dart';
-import 'package:vin_ecommerce/screens/seller_dashboard.dart';
-import 'package:vin_ecommerce/screens/seller_product_add.dart';
-import 'package:vin_ecommerce/screens/seller_bottom_navbar.dart';
-import 'package:vin_ecommerce/screens/seller_product_info.dart';
-import 'package:vin_ecommerce/screens/sign_up_page.dart';
-import 'package:vin_ecommerce/screens/seller_personal_info.dart';
+import 'package:vin_ecommerce/screens/landing_page.dart';
 
 import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
@@ -42,7 +27,7 @@ class MainApp extends StatelessWidget {
       return MaterialApp(
         title: 'VinEcom',
         debugShowCheckedModeBanner: false,
-        home: SignInPage(),
+        home: LandingPage(),
         onGenerateRoute: RouteGenerator.generatorRoute,
       );
     });

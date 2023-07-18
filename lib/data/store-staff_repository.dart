@@ -96,4 +96,34 @@ class StoreStaffRepository {
       return false;
     }
   }
+
+  Future<bool> cancelOrderById(String orderId) async {
+    try {
+      // Retrieve token from SharedPreferences
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      var token = prefs.getString('token');
+
+      var headers = {
+        'Authorization': 'Bearer $token',
+        'Content-Type': 'application/json',
+      };
+
+      http.Response response = await http.patch(
+        Uri.parse(apiClient +
+            cancelOrder +
+            '/$orderId'), // Update the URL to include the orderId
+        headers: headers,
+      );
+
+      if (response.statusCode == 200) {
+        return true;
+      } else {
+        print(response.statusCode);
+        return false;
+      }
+    } catch (e) {
+      print(e.toString());
+      return false;
+    }
+  }
 }

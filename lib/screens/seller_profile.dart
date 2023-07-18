@@ -1,12 +1,10 @@
 import 'package:flutter/material.dart';
-// import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sizer2/sizer2.dart';
 import 'package:vin_ecommerce/data/store-staff_repository.dart';
 import 'package:vin_ecommerce/models/store-staff_model.dart';
 import 'package:vin_ecommerce/screens/sign_in_page.dart';
 import 'package:vin_ecommerce/styles/color.dart';
-import 'package:vin_ecommerce/screens/seller_reviews.dart';
 import 'package:vin_ecommerce/screens/seller_personal_info.dart';
 
 class SellerProfilePage extends StatefulWidget {

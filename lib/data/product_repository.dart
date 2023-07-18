@@ -103,4 +103,116 @@ class ProductRepository {
       return false;
     }
   }
+
+  Future<bool> updateProductById(
+      String category,
+      String name,
+      String avatarUrl,
+      String description,
+      String originalPrice,
+      String discountPrice,
+      String productId) async {
+    try {
+      int priceValue = int.parse(originalPrice);
+      int? discount = null;
+      if (discountPrice != '') {
+        discount = int.parse(discountPrice);
+      }
+      int index = getIndexByCategory(category);
+
+      var body = {
+        "name": name,
+        "description": description,
+        "imageUrl": avatarUrl,
+        "originalPrice": priceValue,
+        "discountPrice": discount,
+        "category": index
+      };
+
+      // Retrieve token from SharedPreferences
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      var token = prefs.getString('token');
+
+      var headers = {
+        'Authorization': 'Bearer $token',
+        'Content-Type':
+            'application/json', // Set the Content-Type header to indicate JSON payload
+      };
+
+      var api = apiClient + updateProduct + '/$productId';
+
+      http.Response response = await http.put(
+        Uri.parse(api),
+        headers: headers,
+        body: json.encode(body),
+      );
+      if (response.statusCode == 200) {
+        return true;
+      } else {
+        print(response.statusCode);
+        return false;
+      }
+    } catch (e) {
+      print(e.toString());
+      return false;
+    }
+  }
+
+  Future<bool> updateInStock(String productId) async {
+    try {
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      var token = prefs.getString('token');
+
+      var headers = {
+        'Authorization': 'Bearer $token',
+        'Content-Type': 'application/json',
+      };
+
+      http.Response response = await http.put(
+        Uri.parse(apiClient +
+            updateStock +
+            '?productId=$productId'), // Update the URL to include the product ID
+        headers: headers,
+      );
+
+      if (response.statusCode == 200) {
+        return true;
+      } else {
+        print(response.statusCode);
+        return false;
+      }
+    } catch (e) {
+      print(e.toString());
+      return false;
+    }
+  }
+
+  Future<bool> deleteProductById(String productId) async {
+    try {
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      var token = prefs.getString('token');
+
+      var headers = {
+        'Authorization': 'Bearer $token',
+        'Content-Type': 'application/json',
+      };
+
+      http.Response response = await http.delete(
+        Uri.parse(apiClient +
+            PRODUCT +
+            '?productId=$productId'), // Update the URL to include the product ID
+        headers: headers,
+      );
+
+      if (response.statusCode == 200) {
+        return true;
+      } else {
+        print(response.statusCode);
+        return false;
+      }
+    } catch (e) {
+      print(e.toString());
+      return false;
+    }
+  }
 }

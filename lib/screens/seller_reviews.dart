@@ -4,9 +4,9 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sizer2/sizer2.dart';
 import 'package:vin_ecommerce/data/review_repository.dart';
 import 'package:vin_ecommerce/models/review_model.dart';
+import 'package:vin_ecommerce/screens/seller_bottom_navbar.dart';
 import 'package:vin_ecommerce/styles/color.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
-import 'package:vin_ecommerce/main.dart';
 
 class SellerReviewsPage extends StatefulWidget {
   const SellerReviewsPage({super.key});
@@ -198,7 +198,10 @@ class _SellerReviewsPageState extends State<SellerReviewsPage>
               onPressed: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => MainApp()),
+                  MaterialPageRoute(
+                      builder: (context) => BottomNavBar(
+                            initialIndex: 0,
+                          )),
                 );
               },
               child: Image.asset(

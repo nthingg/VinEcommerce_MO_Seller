@@ -5,7 +5,6 @@ import 'package:sizer2/sizer2.dart';
 import 'package:vin_ecommerce/styles/button_style.dart';
 import 'package:vin_ecommerce/styles/color.dart';
 
-import 'package:vin_ecommerce/screens/sign_up_page.dart';
 import 'package:vin_ecommerce/screens/seller_bottom_navbar.dart';
 import 'package:http/http.dart' as http;
 
@@ -20,34 +19,27 @@ class _SignInPageState extends State<SignInPage> {
   TextEditingController phoneController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
   bool passenable = true;
-  bool _loading = false;
 
-  bool get loading => _loading;
+  // @override
+  // void initState() {
+  //   super.initState();
+  //   checkToken();
+  // }
 
-  setLoading(bool value) {
-    _loading = value;
-  }
-
-  @override
-  void initState() {
-    super.initState();
-    checkToken();
-  }
-
-  Future<void> checkToken() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    var token = prefs.getString('token');
-    if (token != null) {
-      Navigator.pushAndRemoveUntil(
-        context,
-        MaterialPageRoute(
-            builder: (_) => BottomNavBar(
-                  initialIndex: 0,
-                )),
-        (route) => false,
-      );
-    }
-  }
+  // Future<void> checkToken() async {
+  //   SharedPreferences prefs = await SharedPreferences.getInstance();
+  //   var token = prefs.getString('token');
+  //   if (token != null) {
+  //     Navigator.pushAndRemoveUntil(
+  //       context,
+  //       MaterialPageRoute(
+  //           builder: (_) => BottomNavBar(
+  //                 initialIndex: 0,
+  //               )),
+  //       (route) => false,
+  //     );
+  //   }
+  // }
 
   // final storage = new FlutterSecureStorage();
   void login(String phone, String password) async {
@@ -244,36 +236,6 @@ class _SignInPageState extends State<SignInPage> {
                       ),
                       const SizedBox(
                         height: 25,
-                      ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Text(
-                            'Chưa có tài khoản?',
-                            style: TextStyle(color: secondaryTextColor),
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.only(left: 12),
-                            child: InkWell(
-                              onTap: () {
-                                Navigator.pushAndRemoveUntil(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (_) => SignUpPage()),
-                                    (route) => false);
-                              },
-                              child: Text(
-                                'ĐĂNG KÝ NGAY',
-                                style: TextStyle(
-                                    color: primaryColor,
-                                    fontWeight: FontWeight.bold),
-                              ),
-                            ),
-                          )
-                        ],
-                      ),
-                      const SizedBox(
-                        height: 10,
                       ),
                     ],
                   ),

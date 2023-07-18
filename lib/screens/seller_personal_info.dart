@@ -4,9 +4,9 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:io';
 import 'package:sizer2/sizer2.dart';
 import 'package:vin_ecommerce/data/store-staff_repository.dart';
-import 'package:vin_ecommerce/models/store-staff_model.dart';
 import 'package:vin_ecommerce/screens/seller_bottom_navbar.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:vin_ecommerce/screens/success_update_profile.dart';
 
 import 'package:vin_ecommerce/styles/button_style.dart';
 import 'package:vin_ecommerce/styles/color.dart';
@@ -484,7 +484,7 @@ class _SellerPersonalInfoPageState extends State<SellerPersonalInfoPage> {
                                   context,
                                   MaterialPageRoute(
                                       builder: (_) =>
-                                          BottomNavBar(initialIndex: 4)),
+                                          SuccessUpdateProfilePage()),
                                   (route) => false);
                             },
                           ),

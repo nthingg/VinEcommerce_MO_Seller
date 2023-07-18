@@ -6,8 +6,6 @@ import 'package:vin_ecommerce/models/order_spec_model.dart';
 import 'package:vin_ecommerce/styles/color.dart';
 import 'package:vin_ecommerce/screens/seller_orders.dart';
 
-import 'seller_product_info.dart';
-
 class SellerOrderDetailsPage extends StatefulWidget {
   final int orderId;
 

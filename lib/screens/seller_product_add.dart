@@ -1,18 +1,14 @@
-import 'dart:convert';
 import 'package:flutter/material.dart';
-import 'package:file_picker/file_picker.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:image_picker/image_picker.dart';
 import 'dart:io';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sizer2/sizer2.dart';
 import 'package:vin_ecommerce/data/product_repository.dart';
-import 'package:vin_ecommerce/screens/seller_bottom_navbar.dart';
+import 'package:vin_ecommerce/screens/success_create_product.dart';
 
 import 'package:vin_ecommerce/styles/button_style.dart';
 import 'package:vin_ecommerce/styles/color.dart';
 
-import 'package:http/http.dart' as http;
 import 'package:vin_ecommerce/util/util.dart';
 
 class SellerAddProductPage extends StatefulWidget {
@@ -29,19 +25,13 @@ class _SellerAddProductPageState extends State<SellerAddProductPage> {
   String? imageUrl;
 
   List<String> categories = ['Đồ ăn', 'Thức uống', 'Nhu yếu phẩm'];
-  String selectedCategory =
-      ''; // Declare a variable to hold the selected category
-  File?
-      selectedImage; // Declare a nullable variable to hold the selected image file
+  String selectedCategory = '';
   TextEditingController nameController = TextEditingController();
   TextEditingController originalPriceController = TextEditingController();
   TextEditingController descriptionController = TextEditingController();
 
   bool checkAndShowToast(
-      TextEditingController name,
-      TextEditingController price,
-      TextEditingController description,
-      XFile? image) {
+      TextEditingController name, TextEditingController price, XFile? image) {
     if (name.text.isEmpty) {
       Fluttertoast.showToast(
         msg: 'Vui lòng điền đầy đủ tên sản phẩm!',
@@ -253,7 +243,7 @@ class _SellerAddProductPageState extends State<SellerAddProductPage> {
                                 borderRadius: BorderRadius.circular(8),
                                 child: Container(
                                   width: 90.w,
-                                  height: 20.h,
+                                  height: 50.h,
                                   child: myImage != null
                                       ? Image.file(File(myImage!.path),
                                           fit: BoxFit.cover)
@@ -359,11 +349,8 @@ class _SellerAddProductPageState extends State<SellerAddProductPage> {
                             style: elevatedButtonStyle.copyWith(),
                             child: Text('THÊM'),
                             onPressed: () async {
-                              if (!checkAndShowToast(
-                                  nameController,
-                                  originalPriceController,
-                                  descriptionController,
-                                  myImage)) {
+                              if (!checkAndShowToast(nameController,
+                                  originalPriceController, myImage)) {
                                 return;
                               }
                               if (descriptionController.text.isEmpty) {
@@ -387,7 +374,7 @@ class _SellerAddProductPageState extends State<SellerAddProductPage> {
                                   context,
                                   MaterialPageRoute(
                                       builder: (_) =>
-                                          BottomNavBar(initialIndex: 1)),
+                                          SuccessCreateProductPage()),
                                   (route) => false);
                             },
                           ),

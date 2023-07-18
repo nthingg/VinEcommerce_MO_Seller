@@ -1,13 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:sizer2/sizer2.dart';
 import 'package:vin_ecommerce/data/order_detail_repository.dart';
+import 'package:vin_ecommerce/data/store-staff_repository.dart';
 import 'package:vin_ecommerce/models/order_detail_model.dart';
 import 'package:vin_ecommerce/models/order_spec_model.dart';
+import 'package:vin_ecommerce/screens/success_cancel.dart';
 import 'package:vin_ecommerce/styles/color.dart';
 import 'package:vin_ecommerce/screens/seller_orders_request.dart';
-import 'package:vin_ecommerce/main.dart';
-
-import 'seller_product_info.dart';
 
 class SellerRequestOrderDetailsPage extends StatefulWidget {
   final int orderId;
@@ -23,6 +22,7 @@ class _SellerRequestOrderDetailsPageState
     extends State<SellerRequestOrderDetailsPage> with TickerProviderStateMixin {
   late TabController tabController;
   OrderDetailRepository orderDetailRepo = new OrderDetailRepository();
+  StoreStaffRepository staffRepo = new StoreStaffRepository();
   List<OrderDetail> _orderDetailList = [];
   OrderSpec? _orderSpec;
   String? formattedDate;
@@ -216,11 +216,19 @@ class _SellerRequestOrderDetailsPageState
                 width: 90.w,
                 height: 8.h,
                 child: ElevatedButton(
-                  onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => MainApp()),
-                    );
+                  onPressed: () async {
+                    bool check = await staffRepo
+                        .cancelOrderById(_orderSpec!.getId().toString());
+
+                    if (check) {
+                      // Reload the page
+                      Navigator.of(context).push(
+                        MaterialPageRoute(
+                          builder: (BuildContext context) =>
+                              SuccessCancelPage(),
+                        ),
+                      );
+                    }
                   },
                   style: OutlinedButton.styleFrom(
                     side: BorderSide(
