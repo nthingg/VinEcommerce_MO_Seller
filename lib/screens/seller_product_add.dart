@@ -19,41 +19,17 @@ class SellerAddProductPage extends StatefulWidget {
 }
 
 class _SellerAddProductPageState extends State<SellerAddProductPage> {
+  XFile? myImage = null;
+  String? imageUrl;
+
   List<String> categories = ['Đồ ăn', 'Thức uống', 'Nhu yếu phẩm'];
   String selectedCategory =
       ''; // Declare a variable to hold the selected category
   File?
       selectedImage; // Declare a nullable variable to hold the selected image file
-  TextEditingController phoneController = TextEditingController();
-  TextEditingController passwordController = TextEditingController();
-
-  void login(String phone, String password) async {
-    try {
-      var body = {"phone": phone, "password": password};
-      var headers = {'Content-Type': 'application/json'};
-      http.Response response = await http.post(
-          Uri.parse(
-              'http://www.vinecommerce.somee.com/api/StoreStaff/Authorize'),
-          headers: headers,
-          body: json.encode(body));
-      // http.StreamedResponse response = await request.send();
-      if (response.statusCode == 200) {
-        var data = json.decode(response.body.toString());
-        print(data['accessToken']);
-        // final SharedPreferences? prefs = await _prefs;
-        final SharedPreferences _prefs = await SharedPreferences.getInstance();
-        _prefs.setString('token', data['accessToken']);
-        // await storage.write(key: 'token', value: data['accessToken']);
-        // Navigator.pushAndRemoveUntil(context,
-        //     MaterialPageRoute(builder: (_) => HomeScreen()), (route) => false);
-      } else {
-        print('\n2\n');
-      }
-    } catch (e) {
-      print('3');
-      print(e.toString());
-    }
-  }
+  TextEditingController nameController = TextEditingController();
+  TextEditingController originalPriceController = TextEditingController();
+  TextEditingController descriptionController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -162,7 +138,7 @@ class _SellerAddProductPageState extends State<SellerAddProductPage> {
                           child: Container(
                             width: double.infinity,
                             child: TextField(
-                              controller: passwordController,
+                              controller: nameController,
                               decoration: InputDecoration(
                                 enabledBorder: OutlineInputBorder(
                                     borderSide:
@@ -210,21 +186,26 @@ class _SellerAddProductPageState extends State<SellerAddProductPage> {
                                   backgroundColor: Colors.white),
                               onPressed: () async {
                                 final ImagePicker _picker = ImagePicker();
-                                PickedFile? image = await _picker.getImage(
+                                myImage = await _picker.pickImage(
                                     source: ImageSource.gallery);
+                                print('${myImage?.path}');
+                                setState(() {});
                               },
-                              child: Image.asset(
-                                'assets/images/add_image.png',
-                                scale: 4,
+                              child: ClipRRect(
+                                borderRadius: BorderRadius.circular(8),
+                                child: Container(
+                                  width: 90.w,
+                                  height: 20.h,
+                                  child: myImage != null
+                                      ? Image.file(File(myImage!.path),
+                                          fit: BoxFit.cover)
+                                      : Image.asset(
+                                          'assets/images/add_image.png',
+                                          fit: BoxFit.cover),
+                                ),
                               ),
                             ),
                           ),
-                        ),
-                        selectedImage != null
-                            ? Image.file(selectedImage!)
-                            : Container(),
-                        const SizedBox(
-                          height: 10,
                         ),
                         Padding(
                           padding: EdgeInsets.only(top: 0),
@@ -249,7 +230,7 @@ class _SellerAddProductPageState extends State<SellerAddProductPage> {
                                       child: Container(
                                         width: 20.h,
                                         child: TextField(
-                                          controller: passwordController,
+                                          controller: originalPriceController,
                                           decoration: InputDecoration(
                                             enabledBorder: OutlineInputBorder(
                                                 borderSide: BorderSide(
@@ -290,6 +271,7 @@ class _SellerAddProductPageState extends State<SellerAddProductPage> {
                           child: Container(
                             width: double.infinity,
                             child: TextField(
+                              controller: descriptionController,
                               maxLines:
                                   null, // Set maxLines to null for multiline text area
                               decoration: InputDecoration(
@@ -319,8 +301,6 @@ class _SellerAddProductPageState extends State<SellerAddProductPage> {
                             style: elevatedButtonStyle.copyWith(),
                             child: Text('THÊM'),
                             onPressed: () {
-                              login(phoneController.text.toString(),
-                                  passwordController.text.toString());
                               // Navigator.pushAndRemoveUntil(
                               //     context,
                               //     MaterialPageRoute(
@@ -337,11 +317,5 @@ class _SellerAddProductPageState extends State<SellerAddProductPage> {
             ),
           )),
     );
-  }
-
-  void getValidation() async {
-    final SharedPreferences pref = await SharedPreferences.getInstance();
-    var token = pref.getString('token');
-    print("token ne`" + token!);
   }
 }

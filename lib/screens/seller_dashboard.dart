@@ -37,7 +37,6 @@ class _SellerDashboardPageState extends State<SellerDashboardPage> {
     // TODO: implement initState
     super.initState();
     getDatas();
-    // getStaff();
   }
 
   getDatas() async {

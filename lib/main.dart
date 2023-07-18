@@ -42,7 +42,7 @@ class MainApp extends StatelessWidget {
       return MaterialApp(
         title: 'VinEcom',
         debugShowCheckedModeBanner: false,
-        home: SellerPersonalInfoPage(),
+        home: SignInPage(),
         onGenerateRoute: RouteGenerator.generatorRoute,
       );
     });

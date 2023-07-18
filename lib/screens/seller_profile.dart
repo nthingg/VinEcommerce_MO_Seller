@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 // import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sizer2/sizer2.dart';
+import 'package:vin_ecommerce/data/store-staff_repository.dart';
+import 'package:vin_ecommerce/models/store-staff_model.dart';
 import 'package:vin_ecommerce/screens/sign_in_page.dart';
 import 'package:vin_ecommerce/styles/color.dart';
 import 'package:vin_ecommerce/screens/seller_reviews.dart';
@@ -15,16 +17,21 @@ class SellerProfilePage extends StatefulWidget {
 }
 
 class _SellerProfilePageState extends State<SellerProfilePage> {
-  TextEditingController phoneController = TextEditingController();
-  TextEditingController passwordController = TextEditingController();
-  bool passenable = true;
-  bool isRemember = false;
-  bool _loading = false;
+  StoreStaffRepository staffRepo = new StoreStaffRepository();
+  StoreStaff? staff;
 
-  bool get loading => _loading;
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    getDatas();
+  }
 
-  setLoading(bool value) {
-    _loading = value;
+  getDatas() async {
+    var storeStaff = await staffRepo.getStaff();
+    setState(() {
+      staff = storeStaff;
+    });
   }
 
   @override
@@ -57,14 +64,16 @@ class _SellerProfilePageState extends State<SellerProfilePage> {
                           child: CircleAvatar(
                             radius: 7
                                 .h, // Set the desired radius for the circular image
-                            backgroundImage:
-                                AssetImage('assets/images/vinshop.png'),
+                            backgroundImage: NetworkImage(staff
+                                    ?.getStoreAvatarUrl()
+                                    ?.toString() ??
+                                'https://htmlcolorcodes.com/assets/images/colors/gray-color-solid-background-1920x1080.png'),
                           )),
                       Container(
                         margin: EdgeInsets.only(
                             top: 3.h), // Set the desired vertical margin
                         child: Text(
-                          'Nhà Hàng Ngọc Thịnh',
+                          staff?.getStoreName()?.toString() ?? '',
                           style: TextStyle(
                             fontSize: 24,
                             fontWeight: FontWeight.bold,
@@ -296,7 +305,10 @@ class _SellerProfilePageState extends State<SellerProfilePage> {
                     child: Column(
                       children: [
                         InkWell(
-                          onTap: () {
+                          onTap: () async {
+                            SharedPreferences prefs =
+                                await SharedPreferences.getInstance();
+                            prefs.remove('token');
                             Navigator.push(
                                 context,
                                 MaterialPageRoute(
@@ -368,11 +380,5 @@ class _SellerProfilePageState extends State<SellerProfilePage> {
         ),
       ),
     );
-  }
-
-  void getValidation() async {
-    final SharedPreferences pref = await SharedPreferences.getInstance();
-    var token = pref.getString('token');
-    print("token ne`" + token!);
   }
 }

@@ -1,15 +1,16 @@
-import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
-import 'dart:io';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'dart:io';
 import 'package:sizer2/sizer2.dart';
+import 'package:vin_ecommerce/data/store-staff_repository.dart';
+import 'package:vin_ecommerce/models/store-staff_model.dart';
 import 'package:vin_ecommerce/screens/seller_bottom_navbar.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
 import 'package:vin_ecommerce/styles/button_style.dart';
 import 'package:vin_ecommerce/styles/color.dart';
 
-import 'package:http/http.dart' as http;
 import 'package:vin_ecommerce/util/util.dart';
 
 class SellerPersonalInfoPage extends StatefulWidget {
@@ -24,10 +25,105 @@ class _SellerPersonalInfoPageState extends State<SellerPersonalInfoPage> {
   TextEditingController emailController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
   TextEditingController rePasswordController = TextEditingController();
+  TextEditingController oldPasswordController = TextEditingController();
+  StoreStaffRepository staffRepo = new StoreStaffRepository();
   bool passenable = true;
   XFile? myImage = null;
   String imageUrl =
       'https://htmlcolorcodes.com/assets/images/colors/gray-color-solid-background-1920x1080.png';
+
+  bool checkAndShowToast(
+      TextEditingController name, TextEditingController email) {
+    if (name.text.isEmpty) {
+      Fluttertoast.showToast(
+        msg: 'Vui lòng điền đầy đủ tên!',
+        toastLength: Toast.LENGTH_SHORT,
+        gravity: ToastGravity.BOTTOM,
+      );
+      return false;
+    } else if (email.text.isEmpty) {
+      Fluttertoast.showToast(
+        msg: 'Vui lòng điền đầy đủ email!',
+        toastLength: Toast.LENGTH_SHORT,
+        gravity: ToastGravity.BOTTOM,
+      );
+      return false;
+    }
+    return true;
+  }
+
+  bool validatePassword(
+      TextEditingController pass, TextEditingController rePass) {
+    if (pass.text.toString() != rePass.text.toString()) {
+      Fluttertoast.showToast(
+        msg: 'Mật khẩu xác nhận không đúng!',
+        toastLength: Toast.LENGTH_SHORT,
+        gravity: ToastGravity.BOTTOM,
+      );
+      return false;
+    } else if (pass.text.isEmpty && !rePass.text.isEmpty) {
+      Fluttertoast.showToast(
+        msg: 'Vui lòng nhập mật khẩu mới trước khi xác nhận!',
+        toastLength: Toast.LENGTH_SHORT,
+        gravity: ToastGravity.BOTTOM,
+      );
+      return false;
+    } else if (pass.text.isEmpty && rePass.text.isEmpty) {
+      Fluttertoast.showToast(
+        msg: 'Vui lòng nhập và xác nhận mật khẩu mới!',
+        toastLength: Toast.LENGTH_SHORT,
+        gravity: ToastGravity.BOTTOM,
+      );
+      return false;
+    } else if (pass.text.length < 6 || rePass.text.length < 6) {
+      Fluttertoast.showToast(
+        msg: 'Mật khẩu chứa ít nhất 6 kí tự!',
+        toastLength: Toast.LENGTH_SHORT,
+        gravity: ToastGravity.BOTTOM,
+      );
+      return false;
+    } else if (pass.text.length < 6 && rePass.text.length < 6) {
+      Fluttertoast.showToast(
+        msg: 'Mật khẩu chứa ít nhất 6 kí tự!',
+        toastLength: Toast.LENGTH_SHORT,
+        gravity: ToastGravity.BOTTOM,
+      );
+      return false;
+    }
+    return true;
+  }
+
+  Future<bool> validateCurrentPassword(
+      TextEditingController currentPass) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    var pass = prefs.getString('pass');
+    if (currentPass.text.toString() != pass) {
+      Fluttertoast.showToast(
+        msg: 'Mật khẩu hiện tại không đúng!',
+        toastLength: Toast.LENGTH_SHORT,
+        gravity: ToastGravity.BOTTOM,
+      );
+      return false;
+    }
+    return true;
+  }
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    getDatas();
+  }
+
+  getDatas() async {
+    var storeStaff = await staffRepo.getStaff();
+    setState(() {
+      nameController.text = storeStaff?.getName()?.toString() ?? '';
+      emailController.text = storeStaff?.getEmail()?.toString() ?? '';
+      imageUrl = storeStaff.getAvatarUrl()?.toString() ??
+          'https://htmlcolorcodes.com/assets/images/colors/gray-color-solid-background-1920x1080.png';
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -109,7 +205,7 @@ class _SellerPersonalInfoPageState extends State<SellerPersonalInfoPage> {
                           radius: 8.h,
                           backgroundImage: myImage != null
                               ? Image.file(File(myImage!.path)).image
-                              : AssetImage('assets/images/default_store.png'),
+                              : NetworkImage(imageUrl),
                         ),
                       ),
                     ),
@@ -184,6 +280,60 @@ class _SellerPersonalInfoPageState extends State<SellerPersonalInfoPage> {
                                 filled: true,
                               ),
                               autofocus: false,
+                              textAlignVertical: TextAlignVertical.center,
+                            ),
+                            height: 64,
+                          ),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.only(top: 8),
+                          child: Container(
+                            margin: EdgeInsets.only(top: 3.h),
+                            alignment: Alignment.topLeft,
+                            child: Text(
+                              'MẬT KHẨU CŨ',
+                              style: TextStyle(fontSize: 14),
+                            ),
+                          ),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.only(top: 8),
+                          child: Container(
+                            width: double.infinity,
+                            child: TextField(
+                              controller: oldPasswordController,
+                              style: TextStyle(fontSize: 20),
+                              decoration: InputDecoration(
+                                  enabledBorder: OutlineInputBorder(
+                                      borderSide:
+                                          BorderSide(color: Colors.white)),
+                                  focusedBorder: OutlineInputBorder(
+                                      borderSide:
+                                          BorderSide(color: Colors.white)),
+
+                                  // border: OutlineInputBorder(),
+                                  // hintText: "Input Phone here",
+                                  fillColor: Color(0xffF0F5FA),
+                                  filled: true,
+                                  suffix: IconButton(
+                                      onPressed: () {
+                                        //add Icon button at end of TextField
+                                        setState(() {
+                                          //refresh UI
+                                          if (passenable) {
+                                            //if passenable == true, make it false
+                                            passenable = false;
+                                          } else {
+                                            passenable =
+                                                true; //if passenable == false, make it true
+                                          }
+                                        });
+                                      },
+                                      icon: Icon(passenable == true
+                                          ? Icons.remove_red_eye
+                                          : Icons.password))),
+                              autofocus: false,
+                              obscureText: passenable,
                               textAlignVertical: TextAlignVertical.center,
                             ),
                             height: 64,
@@ -305,8 +455,31 @@ class _SellerPersonalInfoPageState extends State<SellerPersonalInfoPage> {
                             style: elevatedButtonStyle.copyWith(),
                             child: Text('LƯU'),
                             onPressed: () async {
-                              imageUrl = await uploadImageToFireBase(myImage);
-
+                              if (!checkAndShowToast(
+                                  nameController, emailController)) {
+                                return;
+                              }
+                              if (!oldPasswordController.text.isEmpty) {
+                                bool isValid = await validateCurrentPassword(
+                                    oldPasswordController);
+                                if (!isValid) {
+                                  return;
+                                }
+                                if (!validatePassword(
+                                    passwordController, rePasswordController)) {
+                                  return;
+                                }
+                              }
+                              if (myImage != null) {
+                                imageUrl = await uploadImageToFireBase(myImage);
+                              }
+                              bool check = await staffRepo.updateProfile(
+                                  nameController.text.toString(),
+                                  imageUrl,
+                                  emailController.text.toString());
+                              bool passCheck = await staffRepo.updatePassword(
+                                  oldPasswordController.text.toString(),
+                                  passwordController.text.toString());
                               Navigator.pushAndRemoveUntil(
                                   context,
                                   MaterialPageRoute(
@@ -324,11 +497,5 @@ class _SellerPersonalInfoPageState extends State<SellerPersonalInfoPage> {
             ),
           )),
     );
-  }
-
-  void getValidation() async {
-    final SharedPreferences pref = await SharedPreferences.getInstance();
-    var token = pref.getString('token');
-    print("token ne`" + token!);
   }
 }

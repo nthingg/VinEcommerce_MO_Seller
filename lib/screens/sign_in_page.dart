@@ -66,6 +66,7 @@ class _SignInPageState extends State<SignInPage> {
         // final SharedPreferences? prefs = await _prefs;
         final SharedPreferences _prefs = await SharedPreferences.getInstance();
         _prefs.setString('token', data['accessToken']);
+        _prefs.setString('pass', password);
         // await storage.write(key: 'token', value: data['accessToken']);
         Navigator.pushAndRemoveUntil(
             context,
