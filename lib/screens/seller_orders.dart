@@ -243,14 +243,18 @@ class _SellerOrdersPageState extends State<SellerOrdersPage>
                                                   SizedBox(
                                                     width: 8,
                                                   ),
-                                                  Text(
-                                                    order
-                                                        .getCustomerName()
-                                                        .toString(),
-                                                    style: TextStyle(
-                                                        fontWeight:
-                                                            FontWeight.bold,
-                                                        color: primaryColor),
+                                                  Expanded(
+                                                    child: Text(
+                                                      order
+                                                          .getCustomerName()
+                                                          .toString(),
+                                                      style: TextStyle(
+                                                          fontWeight:
+                                                              FontWeight.bold,
+                                                          color: primaryColor),
+                                                      overflow:
+                                                          TextOverflow.ellipsis,
+                                                    ),
                                                   ),
                                                 ],
                                               ),
@@ -459,7 +463,7 @@ class _SellerOrdersPageState extends State<SellerOrdersPage>
                                               child: Row(
                                                 children: [
                                                   Text(
-                                                    'Customer',
+                                                    'Khách hàng',
                                                     style: TextStyle(
                                                         color:
                                                             secondaryTextColor),
@@ -467,14 +471,18 @@ class _SellerOrdersPageState extends State<SellerOrdersPage>
                                                   SizedBox(
                                                     width: 8,
                                                   ),
-                                                  Text(
-                                                    order
-                                                        .getCustomerName()
-                                                        .toString(),
-                                                    style: TextStyle(
-                                                        fontWeight:
-                                                            FontWeight.bold,
-                                                        color: primaryColor),
+                                                  Expanded(
+                                                    child: Text(
+                                                      order
+                                                          .getCustomerName()
+                                                          .toString(),
+                                                      style: TextStyle(
+                                                          fontWeight:
+                                                              FontWeight.bold,
+                                                          color: primaryColor),
+                                                      overflow:
+                                                          TextOverflow.ellipsis,
+                                                    ),
                                                   ),
                                                 ],
                                               ),
@@ -507,6 +515,16 @@ class _SellerOrdersPageState extends State<SellerOrdersPage>
                   // child: Text(token1.toString()),
                 ),
               ),
+        floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
+        floatingActionButton: FloatingActionButton(
+          onPressed: () {
+            isLoading = true;
+            getDoneOrders();
+            setState(() {});
+          },
+          backgroundColor: Colors.white,
+          child: Image.asset('assets/images/reload.png'),
+        ),
       ),
     );
   }

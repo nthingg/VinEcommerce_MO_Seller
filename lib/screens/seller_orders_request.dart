@@ -241,14 +241,18 @@ class _SellerRequestOrdersPageState extends State<SellerRequestOrdersPage>
                                                   SizedBox(
                                                     width: 8,
                                                   ),
-                                                  Text(
-                                                    order
-                                                        .getCustomerName()
-                                                        .toString(),
-                                                    style: TextStyle(
-                                                        fontWeight:
-                                                            FontWeight.bold,
-                                                        color: primaryColor),
+                                                  Expanded(
+                                                    child: Text(
+                                                      order
+                                                          .getCustomerName()
+                                                          .toString(),
+                                                      style: TextStyle(
+                                                          fontWeight:
+                                                              FontWeight.bold,
+                                                          color: primaryColor),
+                                                      overflow:
+                                                          TextOverflow.ellipsis,
+                                                    ),
                                                   ),
                                                 ],
                                               ),
@@ -283,14 +287,18 @@ class _SellerRequestOrdersPageState extends State<SellerRequestOrdersPage>
                   // child: Text(token1.toString()),
                 ),
               ),
+        floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
+        floatingActionButton: FloatingActionButton(
+          onPressed: () {
+            isLoading = true;
+            getOrders();
+            setState(() {});
+          },
+          backgroundColor: Colors.white,
+          child: Image.asset('assets/images/reload.png'),
+        ),
       ),
     );
-  }
-
-  void getValidation() async {
-    final SharedPreferences pref = await SharedPreferences.getInstance();
-    var token = pref.getString('token');
-    print("token ne`" + token!);
   }
 
   PreferredSize _appbar() {

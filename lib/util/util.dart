@@ -10,7 +10,8 @@ double calculateTotalRate(List<Review> reviewList) {
     totalRate += review.getRate()!.toDouble();
   }
 
-  return totalRate / reviewList.length;
+  double averageRate = totalRate / reviewList.length;
+  return double.parse(averageRate.toStringAsFixed(1));
 }
 
 Future<String> uploadImageToFireBase(XFile? myImage) async {

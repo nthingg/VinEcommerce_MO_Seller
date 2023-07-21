@@ -17,7 +17,7 @@ class ProductRepository {
         PRODUCT +
         '/page?StoreId=' +
         storeId.toString() +
-        '&pageIndex=0&pageSize=1000';
+        '&pageIndex=0&pageSize=1000&isSortDesc=true';
 
     // Retrieve token from SharedPreferences
     SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -128,6 +128,8 @@ class ProductRepository {
         "discountPrice": discount,
         "category": index
       };
+
+      print(body);
 
       // Retrieve token from SharedPreferences
       SharedPreferences prefs = await SharedPreferences.getInstance();

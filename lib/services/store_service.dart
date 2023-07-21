@@ -1,3 +1,3 @@
 const STORE = '/stores';
 
-const getStoreReviews = STORE + '/reviews';
+const getStoreReviews = STORE + '/reviews?isSortDesc=true';

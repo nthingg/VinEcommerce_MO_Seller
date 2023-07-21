@@ -153,16 +153,20 @@ class _SellerProductInfoPageState extends State<SellerProductInfoPage> {
 
                                         if (check) {
                                           // Reload the page
-                                          Navigator.of(context).pushReplacement(
-                                            MaterialPageRoute(
-                                              builder: (BuildContext context) =>
-                                                  SellerProductInfoPage(
-                                                orderId: widget.orderId,
-                                                productId: widget.productId,
-                                                fatherRoute: widget.fatherRoute,
-                                              ),
-                                            ),
-                                          );
+                                          isLoading = true;
+                                          getProduct(widget.productId);
+                                          setState(() {});
+                                        }
+                                      } else if (value == 'Còn hàng') {
+                                        bool check =
+                                            await productRepo.updateInStock(
+                                                widget.productId.toString());
+
+                                        if (check) {
+                                          // Reload the page
+                                          isLoading = true;
+                                          getProduct(widget.productId);
+                                          setState(() {});
                                         }
                                       }
                                     },

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:sizer2/sizer2.dart';
 import 'package:vin_ecommerce/screens/seller_bottom_navbar.dart';
+import 'package:vin_ecommerce/screens/seller_orders.dart';
 
 import 'package:vin_ecommerce/styles/button_style.dart';
 import 'package:vin_ecommerce/styles/color.dart';
@@ -56,9 +57,8 @@ class _SuccessCancelPageState extends State<SuccessCancelPage> {
                         Navigator.pushAndRemoveUntil(
                             context,
                             MaterialPageRoute(
-                                builder: (_) => BottomNavBar(
-                                      initialIndex: 1,
-                                    )),
+                              builder: (_) => SellerOrdersPage(),
+                            ),
                             (route) => false);
                       },
                     ),

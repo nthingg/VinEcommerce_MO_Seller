@@ -20,27 +20,6 @@ class _SignInPageState extends State<SignInPage> {
   TextEditingController passwordController = TextEditingController();
   bool passenable = true;
 
-  // @override
-  // void initState() {
-  //   super.initState();
-  //   checkToken();
-  // }
-
-  // Future<void> checkToken() async {
-  //   SharedPreferences prefs = await SharedPreferences.getInstance();
-  //   var token = prefs.getString('token');
-  //   if (token != null) {
-  //     Navigator.pushAndRemoveUntil(
-  //       context,
-  //       MaterialPageRoute(
-  //           builder: (_) => BottomNavBar(
-  //                 initialIndex: 0,
-  //               )),
-  //       (route) => false,
-  //     );
-  //   }
-  // }
-
   // final storage = new FlutterSecureStorage();
   void login(String phone, String password) async {
     try {

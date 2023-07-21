@@ -124,12 +124,13 @@ class _SellerStoragePageState extends State<SellerStoragePage>
                                               ),
                                             ),
                                             Container(
-                                              margin: EdgeInsets.only(top: 5.w),
+                                              margin: EdgeInsets.only(
+                                                  top: 1.h, bottom: 2.h),
                                               child: Row(
                                                 children: [
                                                   Container(
                                                     margin: EdgeInsets.only(
-                                                        right: 6.w),
+                                                        right: 2.w),
                                                     child: Text(
                                                       'Giá ',
                                                       style: TextStyle(
@@ -173,27 +174,60 @@ class _SellerStoragePageState extends State<SellerStoragePage>
                                                           .spaceBetween,
                                                   children: [
                                                     Container(
-                                                      margin: EdgeInsets.only(
-                                                          top: 8, right: 8),
-                                                      padding:
-                                                          EdgeInsets.symmetric(
-                                                              horizontal: 10,
-                                                              vertical: 7),
-                                                      decoration: BoxDecoration(
-                                                          color:
-                                                              Colors.grey[300],
-                                                          shape: BoxShape
-                                                              .rectangle,
-                                                          borderRadius:
-                                                              BorderRadius.all(
-                                                                  Radius
-                                                                      .circular(
-                                                                          14))),
-                                                      child: Text(
-                                                        'Hết hàng',
-                                                        style: TextStyle(
-                                                            color:
-                                                                Colors.black),
+                                                      child: Row(
+                                                        children: [
+                                                          Container(
+                                                            margin:
+                                                                EdgeInsets.only(
+                                                                    right: 1.w),
+                                                            child: Text(
+                                                              'Trạng thái:',
+                                                              style: TextStyle(
+                                                                  color: Colors
+                                                                      .black),
+                                                            ),
+                                                          ),
+                                                          Text(
+                                                            'Hết hàng',
+                                                            style: TextStyle(
+                                                                color: Colors
+                                                                    .grey),
+                                                          ),
+                                                        ],
+                                                      ),
+                                                    ),
+                                                  ],
+                                                ),
+                                              ),
+                                            if (_product?.getIsOutOfStock() ==
+                                                false)
+                                              Container(
+                                                child: Row(
+                                                  mainAxisAlignment:
+                                                      MainAxisAlignment
+                                                          .spaceBetween,
+                                                  children: [
+                                                    Container(
+                                                      child: Row(
+                                                        children: [
+                                                          Container(
+                                                            margin:
+                                                                EdgeInsets.only(
+                                                                    right: 1.w),
+                                                            child: Text(
+                                                              'Trạng thái:',
+                                                              style: TextStyle(
+                                                                  color: Colors
+                                                                      .black),
+                                                            ),
+                                                          ),
+                                                          Text(
+                                                            'Còn hàng',
+                                                            style: TextStyle(
+                                                                color:
+                                                                    primaryColor),
+                                                          ),
+                                                        ],
                                                       ),
                                                     ),
                                                   ],
@@ -276,12 +310,13 @@ class _SellerStoragePageState extends State<SellerStoragePage>
                                               ),
                                             ),
                                             Container(
-                                              margin: EdgeInsets.only(top: 5.w),
+                                              margin: EdgeInsets.only(
+                                                  top: 1.h, bottom: 2.h),
                                               child: Row(
                                                 children: [
                                                   Container(
                                                     margin: EdgeInsets.only(
-                                                        right: 6.w),
+                                                        right: 2.w),
                                                     child: Text(
                                                       'Giá ',
                                                       style: TextStyle(
@@ -316,6 +351,74 @@ class _SellerStoragePageState extends State<SellerStoragePage>
                                                 ],
                                               ),
                                             ),
+                                            if (_product?.getIsOutOfStock() ??
+                                                false)
+                                              Container(
+                                                child: Row(
+                                                  mainAxisAlignment:
+                                                      MainAxisAlignment
+                                                          .spaceBetween,
+                                                  children: [
+                                                    Container(
+                                                      child: Row(
+                                                        children: [
+                                                          Container(
+                                                            margin:
+                                                                EdgeInsets.only(
+                                                                    right: 1.w),
+                                                            child: Text(
+                                                              'Trạng thái:',
+                                                              style: TextStyle(
+                                                                  color: Colors
+                                                                      .black),
+                                                            ),
+                                                          ),
+                                                          Text(
+                                                            'Hết hàng',
+                                                            style: TextStyle(
+                                                                color: Colors
+                                                                    .grey),
+                                                          ),
+                                                        ],
+                                                      ),
+                                                    ),
+                                                  ],
+                                                ),
+                                              ),
+                                            if (_product?.getIsOutOfStock() ==
+                                                false)
+                                              Container(
+                                                child: Row(
+                                                  mainAxisAlignment:
+                                                      MainAxisAlignment
+                                                          .spaceBetween,
+                                                  children: [
+                                                    Container(
+                                                      child: Row(
+                                                        children: [
+                                                          Container(
+                                                            margin:
+                                                                EdgeInsets.only(
+                                                                    right: 1.w),
+                                                            child: Text(
+                                                              'Trạng thái:',
+                                                              style: TextStyle(
+                                                                  color: Colors
+                                                                      .black),
+                                                            ),
+                                                          ),
+                                                          Text(
+                                                            'Còn hàng',
+                                                            style: TextStyle(
+                                                                color:
+                                                                    primaryColor),
+                                                          ),
+                                                        ],
+                                                      ),
+                                                    ),
+                                                  ],
+                                                ),
+                                              ),
                                           ],
                                         ),
                                       ),
@@ -393,12 +496,13 @@ class _SellerStoragePageState extends State<SellerStoragePage>
                                               ),
                                             ),
                                             Container(
-                                              margin: EdgeInsets.only(top: 5.w),
+                                              margin: EdgeInsets.only(
+                                                  top: 1.h, bottom: 2.h),
                                               child: Row(
                                                 children: [
                                                   Container(
                                                     margin: EdgeInsets.only(
-                                                        right: 6.w),
+                                                        right: 2.w),
                                                     child: Text(
                                                       'Giá ',
                                                       style: TextStyle(
@@ -433,6 +537,74 @@ class _SellerStoragePageState extends State<SellerStoragePage>
                                                 ],
                                               ),
                                             ),
+                                            if (_product?.getIsOutOfStock() ??
+                                                false)
+                                              Container(
+                                                child: Row(
+                                                  mainAxisAlignment:
+                                                      MainAxisAlignment
+                                                          .spaceBetween,
+                                                  children: [
+                                                    Container(
+                                                      child: Row(
+                                                        children: [
+                                                          Container(
+                                                            margin:
+                                                                EdgeInsets.only(
+                                                                    right: 1.w),
+                                                            child: Text(
+                                                              'Trạng thái:',
+                                                              style: TextStyle(
+                                                                  color: Colors
+                                                                      .black),
+                                                            ),
+                                                          ),
+                                                          Text(
+                                                            'Hết hàng',
+                                                            style: TextStyle(
+                                                                color: Colors
+                                                                    .grey),
+                                                          ),
+                                                        ],
+                                                      ),
+                                                    ),
+                                                  ],
+                                                ),
+                                              ),
+                                            if (_product?.getIsOutOfStock() ==
+                                                false)
+                                              Container(
+                                                child: Row(
+                                                  mainAxisAlignment:
+                                                      MainAxisAlignment
+                                                          .spaceBetween,
+                                                  children: [
+                                                    Container(
+                                                      child: Row(
+                                                        children: [
+                                                          Container(
+                                                            margin:
+                                                                EdgeInsets.only(
+                                                                    right: 1.w),
+                                                            child: Text(
+                                                              'Trạng thái:',
+                                                              style: TextStyle(
+                                                                  color: Colors
+                                                                      .black),
+                                                            ),
+                                                          ),
+                                                          Text(
+                                                            'Còn hàng',
+                                                            style: TextStyle(
+                                                                color:
+                                                                    primaryColor),
+                                                          ),
+                                                        ],
+                                                      ),
+                                                    ),
+                                                  ],
+                                                ),
+                                              ),
                                           ],
                                         ),
                                       ),
@@ -450,13 +622,9 @@ class _SellerStoragePageState extends State<SellerStoragePage>
         floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
         floatingActionButton: FloatingActionButton(
           onPressed: () {
-            Navigator.of(context).pushReplacement(
-              MaterialPageRoute(
-                builder: (BuildContext context) => BottomNavBar(
-                  initialIndex: 1,
-                ),
-              ),
-            );
+            isLoading = true;
+            getProducts();
+            setState(() {});
           },
           backgroundColor: Colors.white,
           child: Image.asset('assets/images/reload.png'),

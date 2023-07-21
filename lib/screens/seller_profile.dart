@@ -3,6 +3,8 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sizer2/sizer2.dart';
 import 'package:vin_ecommerce/data/store-staff_repository.dart';
 import 'package:vin_ecommerce/models/store-staff_model.dart';
+import 'package:vin_ecommerce/screens/seller_reviews.dart';
+import 'package:vin_ecommerce/screens/seller_store_info.dart';
 import 'package:vin_ecommerce/screens/sign_in_page.dart';
 import 'package:vin_ecommerce/styles/color.dart';
 import 'package:vin_ecommerce/screens/seller_personal_info.dart';
@@ -66,12 +68,12 @@ class _SellerProfilePageState extends State<SellerProfilePage> {
                                         2.h), // Set the desired vertical margin
                               ),
                               Padding(
-                                  padding: const EdgeInsets.only(right: 16),
+                                  padding: const EdgeInsets.only(right: 4),
                                   child: CircleAvatar(
                                     radius: 7
                                         .h, // Set the desired radius for the circular image
                                     backgroundImage: NetworkImage(staff
-                                            ?.getStoreAvatarUrl()
+                                            ?.getAvatarUrl()
                                             ?.toString() ??
                                         'https://htmlcolorcodes.com/assets/images/colors/gray-color-solid-background-1920x1080.png'),
                                   )),
@@ -80,7 +82,7 @@ class _SellerProfilePageState extends State<SellerProfilePage> {
                                     top:
                                         3.h), // Set the desired vertical margin
                                 child: Text(
-                                  staff?.getStoreName()?.toString() ?? '',
+                                  staff?.getName()?.toString() ?? '',
                                   style: TextStyle(
                                     fontSize: 24,
                                     fontWeight: FontWeight.bold,
@@ -99,8 +101,17 @@ class _SellerProfilePageState extends State<SellerProfilePage> {
                                 top: 3.h, right: 5.w, left: 4.w),
                             child: Column(
                               children: [
-                                InkWell(
-                                  onTap: () {
+                                ElevatedButton(
+                                  style: ElevatedButton.styleFrom(
+                                      padding: EdgeInsets
+                                          .zero, // Remove default padding
+                                      shape: RoundedRectangleBorder(
+                                        // Add a rounded shape if desired
+                                        borderRadius:
+                                            BorderRadius.circular(8.0),
+                                      ),
+                                      backgroundColor: Colors.white),
+                                  onPressed: () async {
                                     Navigator.push(
                                         context,
                                         MaterialPageRoute(
@@ -116,6 +127,8 @@ class _SellerProfilePageState extends State<SellerProfilePage> {
                                       borderRadius: BorderRadius.only(
                                         topLeft: Radius.circular(8),
                                         topRight: Radius.circular(8),
+                                        bottomLeft: Radius.circular(8),
+                                        bottomRight: Radius.circular(8),
                                       ),
                                     ),
                                     child: Row(
@@ -141,73 +154,8 @@ class _SellerProfilePageState extends State<SellerProfilePage> {
                                           child: Text(
                                             'Thông tin nhân viên',
                                             style: TextStyle(
-                                              fontSize: 16,
-                                            ),
-                                          ),
-                                        ),
-                                        Container(
-                                          margin: EdgeInsets.symmetric(
-                                              horizontal: 2.5
-                                                  .w), // Set the desired margin value
-                                          child: Image.asset(
-                                            'assets/images/arrow_right_icon.png',
-                                            fit: BoxFit.scaleDown,
-                                            frameBuilder: (context, child,
-                                                frame, wasSynchronouslyLoaded) {
-                                              return Transform.scale(
-                                                scale: 1,
-                                                child: child,
-                                              );
-                                            },
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                ),
-                                InkWell(
-                                  onTap: () {
-                                    // Navigator.push(
-                                    //     context,
-                                    //     MaterialPageRoute(
-                                    //         builder: (_) => SellerOrdersPage()));
-                                  },
-                                  child: Container(
-                                    padding: EdgeInsets.symmetric(
-                                        horizontal: 2.w, vertical: 1.6.h),
-                                    decoration: BoxDecoration(
-                                      color:
-                                          lightGrayColor, // Set the desired background color
-                                      borderRadius: BorderRadius.only(
-                                        bottomLeft: Radius.circular(8),
-                                        bottomRight: Radius.circular(8),
-                                      ),
-                                    ),
-                                    child: Row(
-                                      children: [
-                                        Container(
-                                          margin: EdgeInsets.symmetric(
-                                              horizontal: 3
-                                                  .w), // Set the desired margin value
-                                          child: Image.asset(
-                                            'assets/images/settings_icon.png',
-                                            fit: BoxFit.scaleDown,
-                                            frameBuilder: (context, child,
-                                                frame, wasSynchronouslyLoaded) {
-                                              return Transform.scale(
-                                                scale: 1,
-                                                child: child,
-                                              );
-                                            },
-                                          ),
-                                        ),
-                                        Container(
-                                          width: 56.w,
-                                          child: Text(
-                                            'Cài đặt',
-                                            style: TextStyle(
-                                              fontSize: 16,
-                                            ),
+                                                fontSize: 16,
+                                                color: Colors.black),
                                           ),
                                         ),
                                         Container(
@@ -235,75 +183,79 @@ class _SellerProfilePageState extends State<SellerProfilePage> {
                           ),
                         ),
                         Container(
-                          width: size.width,
-                          child: Padding(
-                            padding: EdgeInsets.only(
-                                top: 3.h, right: 5.w, left: 4.w),
-                            child: InkWell(
-                              onTap: () {
-                                // Navigator.push(
-                                //     context,
-                                //     MaterialPageRoute(
-                                //         builder: (_) => SellerReviewsPage()));
-                              },
-                              child: Container(
-                                padding: EdgeInsets.symmetric(
-                                    horizontal: 2.w, vertical: 1.6.h),
-                                decoration: BoxDecoration(
-                                  color:
-                                      lightGrayColor, // Set the desired background color
-                                  borderRadius: BorderRadius.only(
-                                    bottomLeft: Radius.circular(8),
-                                    bottomRight: Radius.circular(8),
-                                    topRight: Radius.circular(8),
-                                    topLeft: Radius.circular(8),
+                          padding:
+                              EdgeInsets.only(top: 3.h, right: 5.w, left: 4.w),
+                          child: ElevatedButton(
+                            style: ElevatedButton.styleFrom(
+                                padding:
+                                    EdgeInsets.zero, // Remove default padding
+                                shape: RoundedRectangleBorder(
+                                  // Add a rounded shape if desired
+                                  borderRadius: BorderRadius.circular(8.0),
+                                ),
+                                backgroundColor: Colors.white),
+                            onPressed: () async {
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (_) => SellerStoreInfoPage()));
+                            },
+                            child: Container(
+                              padding: EdgeInsets.symmetric(
+                                  horizontal: 2.w, vertical: 1.6.h),
+                              decoration: BoxDecoration(
+                                color:
+                                    lightGrayColor, // Set the desired background color
+                                borderRadius: BorderRadius.only(
+                                  bottomLeft: Radius.circular(8),
+                                  bottomRight: Radius.circular(8),
+                                  topRight: Radius.circular(8),
+                                  topLeft: Radius.circular(8),
+                                ),
+                              ),
+                              child: Row(
+                                children: [
+                                  Container(
+                                    margin: EdgeInsets.symmetric(
+                                        horizontal: 3
+                                            .w), // Set the desired margin value
+                                    child: Image.asset(
+                                      'assets/images/store-info.png',
+                                      fit: BoxFit.scaleDown,
+                                      frameBuilder: (context, child, frame,
+                                          wasSynchronouslyLoaded) {
+                                        return Transform.scale(
+                                          scale: 1,
+                                          child: child,
+                                        );
+                                      },
+                                    ),
                                   ),
-                                ),
-                                child: Row(
-                                  children: [
-                                    Container(
-                                      margin: EdgeInsets.symmetric(
-                                          horizontal: 3
-                                              .w), // Set the desired margin value
-                                      child: Image.asset(
-                                        'assets/images/reviews_icon.png',
-                                        fit: BoxFit.scaleDown,
-                                        frameBuilder: (context, child, frame,
-                                            wasSynchronouslyLoaded) {
-                                          return Transform.scale(
-                                            scale: 1,
-                                            child: child,
-                                          );
-                                        },
-                                      ),
+                                  Container(
+                                    width: 56.w,
+                                    child: Text(
+                                      'Thông tin cửa hàng',
+                                      style: TextStyle(
+                                          fontSize: 16, color: Colors.black),
                                     ),
-                                    Container(
-                                      width: 56.w,
-                                      child: Text(
-                                        'Đánh giá',
-                                        style: TextStyle(
-                                          fontSize: 16,
-                                        ),
-                                      ),
+                                  ),
+                                  Container(
+                                    margin: EdgeInsets.symmetric(
+                                        horizontal: 2.5
+                                            .w), // Set the desired margin value
+                                    child: Image.asset(
+                                      'assets/images/arrow_right_icon.png',
+                                      fit: BoxFit.scaleDown,
+                                      frameBuilder: (context, child, frame,
+                                          wasSynchronouslyLoaded) {
+                                        return Transform.scale(
+                                          scale: 1,
+                                          child: child,
+                                        );
+                                      },
                                     ),
-                                    Container(
-                                      margin: EdgeInsets.symmetric(
-                                          horizontal: 2.5
-                                              .w), // Set the desired margin value
-                                      child: Image.asset(
-                                        'assets/images/arrow_right_icon.png',
-                                        fit: BoxFit.scaleDown,
-                                        frameBuilder: (context, child, frame,
-                                            wasSynchronouslyLoaded) {
-                                          return Transform.scale(
-                                            scale: 1,
-                                            child: child,
-                                          );
-                                        },
-                                      ),
-                                    ),
-                                  ],
-                                ),
+                                  ),
+                                ],
                               ),
                             ),
                           ),
@@ -315,8 +267,17 @@ class _SellerProfilePageState extends State<SellerProfilePage> {
                                 top: 3.h, right: 5.w, left: 4.w),
                             child: Column(
                               children: [
-                                InkWell(
-                                  onTap: () async {
+                                ElevatedButton(
+                                  style: ElevatedButton.styleFrom(
+                                      padding: EdgeInsets
+                                          .zero, // Remove default padding
+                                      shape: RoundedRectangleBorder(
+                                        // Add a rounded shape if desired
+                                        borderRadius:
+                                            BorderRadius.circular(8.0),
+                                      ),
+                                      backgroundColor: Colors.white),
+                                  onPressed: () async {
                                     SharedPreferences prefs =
                                         await SharedPreferences.getInstance();
                                     prefs.remove('token');
@@ -357,8 +318,8 @@ class _SellerProfilePageState extends State<SellerProfilePage> {
                                           child: Text(
                                             'Đăng xuất',
                                             style: TextStyle(
-                                              fontSize: 16,
-                                            ),
+                                                fontSize: 16,
+                                                color: Colors.black),
                                           ),
                                         ),
                                         Container(
